@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block title %}Pedido #{{ order.pk }} — MHD Portal{% endblock %}
+
+{% block content %}
+<section class="mx-auto grid max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[280px_1fr]">
+    {% include 'components/portal_nav.html' %}
+
+    <div class="space-y-6">
+        <!-- Cabecera -->
+        <div class="flex flex-wrap items-start justify-between gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <div>
+                <p class="text-sm uppercase tracking-[0.3em] text-cyan">Portal distribuidor</p>
+                <h1 class="mt-2 text-4xl font-semibold text-white">Pedido #{{ order.pk }}</h1>
+                <p class="mt-1 text-sm text-slate-400">{{ order.created_at|date:'d/m/Y H:i' }}</p>
+            </div>
+            <a href="{% url 'orders:order_history' %}" class="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-300 transition hover:border-cyan/40 hover:text-cyan">← Mis pedidos</a>
+        </div>
+
+        <!-- Timeline de seguimiento -->
+        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <h2 class="text-lg font-semibold text-white">Seguimiento del pedido</h2>
+            <div class="mt-6 flex items-center gap-0">
+                {% with s=order.status %}
+                <!-- Paso 1: Recibido -->
+                <div class="flex flex-1 flex-col items-center gap-2">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-full {% if s == 'pending' or s == 'confirmed' or s == 'shipped' or s == 'delivered' %}bg-cyan text-slate-950{% else %}border border-white/20 text-slate-500{% endif %} text-sm font-bold">
+                        {% if s == 'confirmed' or s == 'shipped' or s == 'delivered' %}
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        {% else %}1{% endif %}
+                    </div>
+                    <span class="text-center text-xs {% if s == 'pending' %}text-cyan font-semibold{% else %}text-slate-400{% endif %}">Recibido</span>
+                </div>
+                <div class="mb-5 h-0.5 flex-1 {% if s == 'confirmed' or s == 'shipped' or s == 'delivered' %}bg-cyan{% else %}bg-white/10{% endif %}"></div>
+                <!-- Paso 2: Confirmado -->
+                <div class="flex flex-1 flex-col items-center gap-2">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-full {% if s == 'confirmed' or s == 'shipped' or s == 'delivered' %}bg-cyan text-slate-950{% else %}border border-white/20 text-slate-500{% endif %} text-sm font-bold">
+                        {% if s == 'shipped' or s == 'delivered' %}
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        {% else %}2{% endif %}
+                    </div>
+                    <span class="text-center text-xs {% if s == 'confirmed' %}text-cyan font-semibold{% else %}text-slate-400{% endif %}">Confirmado</span>
+                </div>
+                <div class="mb-5 h-0.5 flex-1 {% if s == 'shipped' or s == 'delivered' %}bg-cyan{% else %}bg-white/10{% endif %}"></div>
+                <!-- Paso 3: Enviado -->
+                <div class="flex flex-1 flex-col items-center gap-2">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-full {% if s == 'shipped' or s == 'delivered' %}bg-cyan text-slate-950{% else %}border border-white/20 text-slate-500{% endif %} text-sm font-bold">
+                        {% if s == 'delivered' %}
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        {% else %}3{% endif %}
+                    </div>
+                    <span class="text-center text-xs {% if s == 'shipped' %}text-cyan font-semibold{% else %}text-slate-400{% endif %}">Enviado</span>
+                </div>
+                <div class="mb-5 h-0.5 flex-1 {% if s == 'delivered' %}bg-cyan{% else %}bg-white/10{% endif %}"></div>
+                <!-- Paso 4: Entregado -->
+                <div class="flex flex-1 flex-col items-center gap-2">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-full {% if s == 'delivered' %}bg-emerald-400 text-slate-950{% else %}border border-white/20 text-slate-500{% endif %} text-sm font-bold">
+                        {% if s == 'delivered' %}
+                            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                        {% else %}4{% endif %}
+                    </div>
+                    <span class="text-center text-xs {% if s == 'delivered' %}text-emerald-400 font-semibold{% else %}text-slate-400{% endif %}">Entregado</span>
+                </div>
+                {% endwith %}
+            </div>
+        </div>
+
+        <!-- Líneas del pedido -->
+        <div class="overflow-x-auto rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-white/10 text-xs uppercase tracking-widest text-slate-400">
+                        <th class="px-6 py-4 text-left">Producto</th>
+                        <th class="px-6 py-4 text-center">Cajas</th>
+                        <th class="px-6 py-4 text-right">Precio/caja</th>
+                        <th class="px-6 py-4 text-right">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    {% for item in order.items.all %}
+                    <tr class="hover:bg-white/[0.02]">
+                        <td class="px-6 py-4">
+                            <p class="font-medium text-white">{{ item.product.name }}</p>
+                            <p class="text-xs text-slate-400">{{ item.product.units_per_box }} ud/caja · {{ item.product.distributor_price }} €/ud</p>
+                        </td>
+                        <td class="px-6 py-4 text-center text-slate-300">{{ item.quantity }}</td>
+                        <td class="px-6 py-4 text-right text-slate-300">{{ item.price }} €</td>
+                        <td class="px-6 py-4 text-right font-semibold text-white">{{ item.line_total }} €</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr class="border-t border-white/10">
+                        <td colspan="3" class="px-6 py-5 text-right text-sm text-slate-400">Total del pedido</td>
+                        <td class="px-6 py-5 text-right text-2xl font-semibold text-white">{{ order.total_amount }} €</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Acciones -->
+        <div class="flex gap-3">
+            <a href="{% url 'orders:new_order' %}" class="rounded-full bg-cyan px-6 py-2.5 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">+ Nuevo pedido</a>
+            <a href="{% url 'invoices:list' %}" class="rounded-full border border-white/15 px-6 py-2.5 text-sm text-slate-300 transition hover:border-cyan/40 hover:text-cyan">Ver facturas</a>
+        </div>
+    </div>
+</section>
+{% endblock %}

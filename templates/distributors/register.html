@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Distributor Registration{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-3xl px-6 py-16">
+    <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <p class="text-sm uppercase tracking-[0.3em] text-cyan">B2B access</p>
+        <h1 class="mt-4 text-4xl font-semibold text-white">Register as an MHD distributor</h1>
+        <form method="post" class="mt-8 grid gap-4 md:grid-cols-2">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <div class="{% if field.name == 'address' or field.name == 'services_offered' %}md:col-span-2{% endif %}">
+                    <label class="mb-2 block text-sm text-slate-300">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<p class="mt-1 text-sm text-rose-300">{{ field.errors|join:', ' }}</p>{% endif %}
+                </div>
+            {% endfor %}
+            <div class="md:col-span-2">
+                <button type="submit" class="rounded-full bg-cyan px-6 py-3 text-sm font-semibold text-slate-950">Submit registration</button>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

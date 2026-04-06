@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if request.LANGUAGE_CODE == 'es' %}Iniciar sesion{% else %}Login{% endif %}{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-xl px-6 py-16">
+    <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <h1 class="text-4xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Acceso para distribuidores{% else %}Distributor login{% endif %}</h1>
+        <form method="post" class="auth-form mt-8 space-y-4">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            {% for field in form %}
+                <div>
+                    <label class="mb-2 block text-sm text-slate-300" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="mt-1 text-sm text-rose-300">{{ field.errors|join:', ' }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="rounded-full bg-cyan px-6 py-3 text-sm font-semibold text-slate-950">{% if request.LANGUAGE_CODE == 'es' %}Entrar{% else %}Login{% endif %}</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

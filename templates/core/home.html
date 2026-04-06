@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if request.LANGUAGE_CODE == 'es' %}MHD Platform | Soluciones magnetohidrodinamicas{% else %}MHD
+Platform | Magnetohydrodynamic Solutions{% endif %}{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+{% endblock %}
+
+{% block content %}
+{% include 'components/hero_home.html' %}
+
+<section class="mx-auto max-w-7xl px-6 py-12">
+    <div class="grid gap-8 lg:grid-cols-2">
+        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <p class="text-sm uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Problema{% else %}Problem{% endif %}</p>
+            <h2 class="mt-4 text-3xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}La dureza del agua
+                y la combustion ineficiente aumentan el coste del ciclo de vida.{% else %}Water hardness and inefficient
+                combustion increase lifecycle cost.{% endif %}</h2>
+            <p class="mt-4 text-base leading-7 text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}El agua dura
+                acelera la acumulacion de cal en superficies de intercambio termico, reduciendo la transferencia de
+                calor y aumentando el mantenimiento. En sistemas de gas, una combustion inestable puede elevar el
+                consumo y el desgaste de componentes criticos.{% else %}Hard water accelerates limescale accumulation on
+                heat-exchange surfaces, reducing thermal transfer and increasing maintenance. In gas systems, poor
+                combustion stability can raise fuel consumption and wear on critical components.{% endif %}</p>
+        </div>
+        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <p class="text-sm uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Solución{% else %}Approach{% endif %}</p>
+            <h2 class="mt-4 text-3xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Magnetohidrodinamica aplicada a la proteccion de calderas.{% else %}Magnetohydrodynamics applied to
+                boiler protection.{% endif %}</h2>
+            <p class="mt-4 text-base leading-7 text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}Los dispositivos
+                MHD aplican campos magneticos alrededor de flujos de agua y gas en movimiento. El objetivo es modificar
+                la formacion de cal y favorecer condiciones de trabajo mas limpias y eficientes sin productos quimicos
+                ni redisenos invasivos.{% else %}MHD devices apply magnetic fields around moving water and gas streams.
+                The goal is to alter scale formation behavior and support cleaner, more efficient operating conditions
+                without chemicals or invasive system redesign.{% endif %}</p>
+        </div>
+    </div>
+</section>
+
+<section class="mx-auto max-w-7xl px-6 py-12">
+    <div class="flex items-end justify-between gap-6">
+        <div>
+            <p class="text-sm uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Productos{% else %}Products{% endif %}</p>
+            <h2 class="mt-4 text-4xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Dos productos, una
+                estrategia coherente para optimizar calderas.{% else %}Two products, one coherent boiler optimization
+                strategy.{% endif %}</h2>
+        </div>
+    </div>
+    <div class="mt-10 grid gap-6 lg:grid-cols-2">
+        {% for product in featured_products %}
+        {% include 'components/product_card.html' %}
+        {% empty %}
+        <div class="rounded-[2rem] border border-dashed border-white/15 p-8 text-slate-400 lg:col-span-2">{% if request.LANGUAGE_CODE == 'es' %}Crea MHD Agua y MHD Gas desde el admin para rellenar esta seccion.{% else %}Create MHD Agua and MHD Gas in the admin to populate this section.{% endif %}</div>
+        {% endfor %}
+    </div>
+</section>
+
+{% include 'components/benefits_grid.html' %}
+
+<section class="mx-auto max-w-7xl px-6 py-12">
+    <div class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+        <div>
+            <p class="text-sm uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Tecnologia{% else %}Technology{% endif %}</p>
+            <h2 class="mt-4 text-4xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Que significa la
+                magnetohidrodinamica en terminos practicos para calderas.{% else %}What magnetohydrodynamics means in
+                practical boiler terms.{% endif %}</h2>
+        </div>
+        <div
+            class="rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/10 to-cyan/10 p-8 backdrop-blur-xl">
+            <p class="text-base leading-8 text-slate-200">{% if request.LANGUAGE_CODE == 'es' %}La magnetohidrodinamica
+                estudia como interactuan los campos magneticos con fluidos conductores y particulas cargadas en
+                movimiento. En aplicaciones para calderas, los dispositivos MHD se disenan para influir en las
+                condiciones dinamicas del agua y la combustion, reduciendo el impacto de la cal y mejorando la
+                consistencia operativa sin consumibles adicionales.{% else %}Magnetohydrodynamics studies how magnetic
+                fields interact with conductive fluids and charged particles in motion. In boiler-related applications,
+                MHD devices are engineered to influence the dynamic conditions around water minerals and combustion
+                streams, aiming to reduce scaling impact and improve operational consistency without adding
+                consumables.{% endif %}</p>
+        </div>
+    </div>
+</section>
+
+{% include 'components/cta_banner.html' %}
+
+{% include 'components/testimonials_grid.html' %}
+{% endblock %}

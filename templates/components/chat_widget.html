@@ -1,0 +1,79 @@
+<div id="chat-widget" class="fixed bottom-6 left-6 z-50 w-80 rounded-3xl border border-white/10 bg-slate-900/90 shadow-2xl shadow-cyan/10 backdrop-blur-xl">
+    <button id="chat-toggle" class="flex w-full items-center justify-between px-5 py-4 text-left text-sm font-semibold text-white">
+        <span>{% if request.LANGUAGE_CODE == 'es' %}Preguntar a MHD Assistant{% else %}Ask MHD Assistant{% endif %}</span>
+        <span class="rounded-full bg-cyan/20 px-2 py-1 text-xs text-cyan">AI</span>
+    </button>
+    <div id="chat-body" class="hidden border-t border-white/10 px-5 py-4">
+        <p class="mb-3 text-xs leading-5 text-slate-400">{% if request.LANGUAGE_CODE == 'es' %}Pregunta sobre tecnologia magnetohidrodinamica, prevencion de cal, eficiencia de calderas o instalacion.{% else %}Ask about magnetohydrodynamic technology, limescale prevention, boiler efficiency, or installation.{% endif %}</p>
+        <div id="chat-messages" class="mb-3 max-h-60 space-y-2 overflow-y-auto text-sm text-slate-200"></div>
+        <form id="chat-form" class="space-y-2">
+            {% csrf_token %}
+            <input id="chat-input" type="text" autocomplete="off" class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none" placeholder="{% if request.LANGUAGE_CODE == 'es' %}Como se instala?{% else %}How is it installed?{% endif %}">
+            <button type="submit" id="chat-submit" class="w-full rounded-2xl bg-cyan px-4 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 disabled:opacity-50">{% if request.LANGUAGE_CODE == 'es' %}Preguntar{% else %}Ask{% endif %}</button>
+        </form>
+    </div>
+</div>
+
+<script>
+(function () {
+    const toggle  = document.getElementById('chat-toggle');
+    const body    = document.getElementById('chat-body');
+    const form    = document.getElementById('chat-form');
+    const input   = document.getElementById('chat-input');
+    const submit  = document.getElementById('chat-submit');
+    const msgs    = document.getElementById('chat-messages');
+
+    toggle.addEventListener('click', function () {
+        body.classList.toggle('hidden');
+        if (!body.classList.contains('hidden')) input.focus();
+    });
+
+    function addMessage(text, role) {
+        const div = document.createElement('div');
+        div.className = role === 'user'
+            ? 'ml-4 rounded-2xl rounded-tr-sm bg-cyan/10 px-3 py-2 text-right text-xs text-slate-200'
+            : 'mr-4 rounded-2xl rounded-tl-sm bg-white/5 px-3 py-2 text-xs text-slate-300';
+        div.textContent = text;
+        msgs.appendChild(div);
+        msgs.scrollTop = msgs.scrollHeight;
+    }
+
+    form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        const message = input.value.trim();
+        if (!message) return;
+
+        const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        addMessage(message, 'user');
+        input.value = '';
+        submit.disabled = true;
+
+        const typing = document.createElement('div');
+        typing.className = 'mr-4 rounded-2xl rounded-tl-sm bg-white/5 px-3 py-2 text-xs text-slate-500 italic';
+        typing.textContent = '…';
+        msgs.appendChild(typing);
+        msgs.scrollTop = msgs.scrollHeight;
+
+        try {
+            const res = await fetch('{% url "core:chat" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({ message }),
+            });
+            const data = await res.json();
+            typing.remove();
+            addMessage(data.reply || data.error || 'Error desconocido.', 'bot');
+        } catch {
+            typing.remove();
+            addMessage('No se pudo conectar con el asistente.', 'bot');
+        } finally {
+            submit.disabled = false;
+            input.focus();
+        }
+    });
+}());
+</script>

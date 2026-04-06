@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Recursos MHD — Documentación y multimedia{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="relative overflow-hidden py-24 text-center">
+    <div class="mx-auto max-w-3xl px-6">
+        <p class="text-sm uppercase tracking-[0.3em] text-cyan">Centro de recursos</p>
+        <h1 class="mt-4 text-5xl font-semibold leading-tight text-white">Todo sobre los productos MHD</h1>
+        <p class="mt-5 text-lg text-slate-300">Infografías, vídeos, fichas técnicas, audios y más. Descarga o visualiza libremente.</p>
+    </div>
+</section>
+
+<!-- Filtros por tipo -->
+<section class="mx-auto max-w-7xl px-6 pb-6">
+    <div class="flex flex-wrap items-center gap-3">
+        <a href="{% url 'products:resources' %}"
+           class="rounded-full px-5 py-2 text-sm font-medium transition
+                  {% if not active_type %}bg-cyan text-slate-950{% else %}border border-white/15 text-slate-300 hover:border-cyan/40 hover:text-white{% endif %}">
+            Todos
+        </a>
+        {% for value, label in types %}
+        <a href="?tipo={{ value }}"
+           class="flex items-center gap-2 rounded-full px-5 py-2 text-sm font-medium transition
+                  {% if active_type == value %}bg-cyan text-slate-950{% else %}border border-white/15 text-slate-300 hover:border-cyan/40 hover:text-white{% endif %}">
+            {% if value == 'infographic' %}
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+            {% elif value == 'video' %}
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 10.5 4.72-4.72a.75.75 0 0 1 1.28.53v11.38a.75.75 0 0 1-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 0 0 2.25-2.25v-9a2.25 2.25 0 0 0-2.25-2.25h-9A2.25 2.25 0 0 0 2.25 7.5v9a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
+            {% elif value == 'audio' %}
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z"/></svg>
+            {% elif value == 'pdf' %}
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+            {% else %}
+                <svg class="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 0 1 1.242 7.244l-4.5 4.5a4.5 4.5 0 0 1-6.364-6.364l1.757-1.757m13.35-.622 1.757-1.757a4.5 4.5 0 0 0-6.364-6.364l-4.5 4.5a4.5 4.5 0 0 0 1.242 7.244"/></svg>
+            {% endif %}
+            {{ label }}
+        </a>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Grid de recursos -->
+<section class="mx-auto max-w-7xl px-6 pb-24">
+    {% if resources %}
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {% for res in resources %}
+        <div class="group flex flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl transition hover:border-cyan/30 hover:shadow-glow cursor-pointer"
+             onclick="openResource(this)"
+             data-title="{{ res.title }}"
+             data-description="{{ res.description|escapejs }}"
+             data-type-label="{{ res.get_resource_type_display }}"
+             data-type="{{ res.resource_type }}"
+             data-product="{{ res.product.name|default:'' }}"
+             data-href="{{ res.href }}">
+
+            <!-- Thumbnail / placeholder por tipo -->
+            <div class="relative flex h-44 items-center justify-center overflow-hidden bg-slate-900/60">
+                {% if res.thumbnail %}
+                    <img src="{{ res.thumbnail.url }}" alt="{{ res.title }}" class="h-full w-full object-cover transition group-hover:scale-105">
+                {% elif res.resource_type == 'video' %}
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-cyan/20 text-cyan">
+                        <svg class="h-7 w-7" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+                {% elif res.resource_type == 'audio' %}
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-violet-500/20 text-violet-400">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.114 5.636a9 9 0 0 1 0 12.728M16.463 8.288a5.25 5.25 0 0 1 0 7.424M6.75 8.25l4.72-4.72a.75.75 0 0 1 1.28.53v15.88a.75.75 0 0 1-1.28.53l-4.72-4.72H4.51c-.88 0-1.704-.507-1.938-1.354A9.009 9.009 0 0 1 2.25 12c0-.83.112-1.633.322-2.396C2.806 8.756 3.63 8.25 4.51 8.25H6.75Z"/></svg>
+                    </div>
+                {% elif res.resource_type == 'pdf' %}
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-rose-500/20 text-rose-400">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+                    </div>
+                {% else %}
+                    <div class="flex h-14 w-14 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-400">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                    </div>
+                {% endif %}
+                <!-- Badge tipo -->
+                <span class="absolute left-3 top-3 rounded-full
+                    {% if res.resource_type == 'video' %}bg-cyan/20 text-cyan
+                    {% elif res.resource_type == 'audio' %}bg-violet-500/20 text-violet-300
+                    {% elif res.resource_type == 'pdf' %}bg-rose-500/20 text-rose-300
+                    {% elif res.resource_type == 'infographic' %}bg-emerald-500/20 text-emerald-300
+                    {% else %}bg-slate-500/20 text-slate-300{% endif %}
+                    px-3 py-1 text-xs font-medium">
+                    {{ res.get_resource_type_display }}
+                </span>
+                <!-- Botón info -->
+                <button class="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full bg-slate-950/60 text-slate-300 backdrop-blur-sm transition hover:bg-cyan/20 hover:text-cyan"
+                        title="Más información"
+                        onclick="event.stopPropagation(); openResource(this.closest('[data-title]'))">
+                    <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"/></svg>
+                </button>
+            </div>
+
+            <!-- Info -->
+            <div class="flex flex-1 flex-col gap-3 p-6">
+                {% if res.product %}
+                <p class="text-xs uppercase tracking-widest text-cyan">{{ res.product.name }}</p>
+                {% endif %}
+                <h3 class="text-base font-semibold leading-snug text-white">{{ res.title }}</h3>
+                {% if res.description %}
+                <p class="text-sm text-slate-400 line-clamp-2 flex-1">{{ res.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="rounded-[2rem] border border-white/10 bg-white/5 px-8 py-20 text-center backdrop-blur-xl">
+        <p class="text-slate-400">No hay recursos disponibles{% if active_type %} para este tipo{% endif %} todavía.</p>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Modal recurso -->
+<div id="resource-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeResource()"></div>
+    <!-- Panel -->
+    <div class="relative w-full max-w-lg rounded-[2rem] border border-white/10 bg-slate-900 p-8 shadow-2xl">
+        <button onclick="closeResource()" class="absolute right-5 top-5 flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-slate-400 transition hover:border-white/30 hover:text-white" aria-label="Cerrar">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+        </button>
+        <span id="modal-type-badge" class="rounded-full px-3 py-1 text-xs font-medium"></span>
+        <p id="modal-product" class="mt-4 text-xs uppercase tracking-widest text-cyan"></p>
+        <h2 id="modal-title" class="mt-2 text-2xl font-semibold text-white"></h2>
+        <p id="modal-description" class="mt-4 text-sm leading-relaxed text-slate-300 whitespace-pre-line"></p>
+        <div id="modal-action" class="mt-8"></div>
+    </div>
+</div>
+
+<script>
+const typeStyles = {
+    video:       { badge: 'bg-cyan/20 text-cyan' },
+    audio:       { badge: 'bg-violet-500/20 text-violet-300' },
+    pdf:         { badge: 'bg-rose-500/20 text-rose-300' },
+    infographic: { badge: 'bg-emerald-500/20 text-emerald-300' },
+};
+
+function openResource(card) {
+    const title       = card.dataset.title;
+    const description = card.dataset.description;
+    const typeLabel   = card.dataset.typeLabel;
+    const type        = card.dataset.type;
+    const product     = card.dataset.product;
+    const href        = card.dataset.href;
+
+    const modal = document.getElementById('resource-modal');
+    const badge = document.getElementById('modal-type-badge');
+    const styles = typeStyles[type] || { badge: 'bg-slate-500/20 text-slate-300' };
+
+    badge.className = 'rounded-full px-3 py-1 text-xs font-medium ' + styles.badge;
+    badge.textContent = typeLabel;
+
+    const productEl = document.getElementById('modal-product');
+    productEl.textContent = product;
+    productEl.style.display = product ? '' : 'none';
+
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-description').textContent = description;
+
+    const actionEl = document.getElementById('modal-action');
+    if (href) {
+        const actionMap = {
+            video:       { label: 'Ver vídeo',      cls: 'bg-cyan text-slate-950 hover:shadow-glow' },
+            pdf:         { label: 'Descargar PDF',   cls: 'border border-rose-400/40 bg-rose-500/10 text-rose-300 hover:bg-rose-500/20' },
+            infographic: { label: 'Ver infografía',  cls: 'border border-emerald-400/40 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/20' },
+            audio:       { label: null,              cls: '' },
+            link:        { label: 'Abrir enlace',    cls: 'border border-white/15 text-slate-300 hover:border-cyan/40 hover:text-white' },
+        };
+        const action = actionMap[type] || actionMap.link;
+        if (type === 'audio') {
+            actionEl.innerHTML = `<audio controls class="w-full rounded-xl" src="${href}"></audio>`;
+        } else {
+            actionEl.innerHTML = `<a href="${href}" target="_blank" rel="noopener"
+                class="flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition ${action.cls}">
+                ${action.label}
+            </a>`;
+        }
+    } else {
+        actionEl.innerHTML = '';
+    }
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeResource() {
+    const modal = document.getElementById('resource-modal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = '';
+    // Stop any playing audio
+    const audio = modal.querySelector('audio');
+    if (audio) audio.pause();
+}
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeResource();
+});
+</script>
+{% endblock %}

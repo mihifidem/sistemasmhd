@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+
+{% block title %}Nuevo Pedido — MHD Portal{% endblock %}
+
+{% block content %}
+<section class="mx-auto grid max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[280px_1fr]">
+    {% include 'components/portal_nav.html' %}
+
+    <div class="space-y-6">
+        <!-- Cabecera -->
+        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <p class="text-sm uppercase tracking-[0.3em] text-cyan">Portal distribuidor</p>
+            <h1 class="mt-3 text-4xl font-semibold text-white">Nuevo pedido</h1>
+            <p class="mt-2 text-slate-300">Indica el número de cajas de cada producto. El importe se calcula automáticamente.</p>
+            {% if distributor %}
+            <p class="mt-3 text-xs text-slate-400">Tarifa asignada: <span class="font-semibold text-cyan">{{ distributor.get_price_tier_display }}</span></p>
+            {% endif %}
+        </div>
+
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="rounded-2xl border border-rose-400/30 bg-rose-500/10 px-5 py-3 text-sm text-rose-300">{{ msg }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" id="order-form">
+            {% csrf_token %}
+
+            <!-- Tabla de productos -->
+            <div class="overflow-x-auto rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl">
+                <table class="w-full text-sm">
+                    <thead>
+                        <tr class="border-b border-white/10 text-xs uppercase tracking-widest text-slate-400">
+                            <th class="px-6 py-4 text-left">Producto</th>
+                            <th class="px-6 py-4 text-center">Ud/caja</th>
+                            <th class="px-6 py-4 text-right">Precio ud.</th>
+                            <th class="px-6 py-4 text-right">Precio/caja</th>
+                            <th class="px-6 py-4 text-center w-36">Cajas</th>
+                            <th class="px-6 py-4 text-right">Subtotal</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-white/5">
+                        {% for product in products %}
+                        <tr class="transition hover:bg-white/[0.03]" data-price="{{ product.effective_price }}" data-upb="{{ product.units_per_box }}">
+                            <td class="px-6 py-5">
+                                <p class="font-medium text-white">{{ product.name }}</p>
+                                <p class="mt-0.5 text-xs text-slate-400 line-clamp-1">{{ product.description|truncatechars:60 }}</p>
+                            </td>
+                            <td class="px-6 py-5 text-center text-slate-300">{{ product.units_per_box }}</td>
+                            <td class="px-6 py-5 text-right text-slate-300">{{ product.effective_price }} €</td>
+                            <td class="px-6 py-5 text-right font-semibold text-white price-box">—</td>
+                            <td class="px-6 py-5 text-center">
+                                <input
+                                    type="number"
+                                    name="qty_{{ product.id }}"
+                                    min="0"
+                                    value="0"
+                                    class="qty-input w-24 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-center text-white focus:border-cyan/50 focus:outline-none focus:ring-1 focus:ring-cyan/30"
+                                >
+                            </td>
+                            <td class="px-6 py-5 text-right font-semibold text-white subtotal">0,00 €</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="px-6 py-10 text-center text-slate-400">No hay productos disponibles.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pronto pago -->
+            <label for="early-payment-check" class="flex cursor-pointer items-start gap-4 rounded-[2rem] border border-emerald-400/20 bg-emerald-500/5 p-6 backdrop-blur-xl transition hover:border-emerald-400/40">
+                <div class="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-md border border-emerald-400/40 bg-emerald-500/10" id="check-box-ui">
+                    <svg id="check-icon" class="hidden h-3.5 w-3.5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
+                    </svg>
+                </div>
+                <input type="checkbox" name="early_payment" id="early-payment-check" value="1" class="sr-only">
+                <div>
+                    <p class="font-semibold text-emerald-300">Descuento pronto pago &mdash; 10 %</p>
+                    <p class="mt-1 text-sm text-slate-400">Al marcar esta opción confirmas que abonarás el pedido al contado en el momento de la entrega. El descuento del 10 % se aplica sobre el total del pedido.</p>
+                </div>
+            </label>
+
+            <!-- Resumen y confirmar -->
+            <div class="rounded-[2rem] border border-cyan/20 bg-gradient-to-r from-cyan/10 to-blue-500/10 p-8 backdrop-blur-xl">
+                <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+                    <div>
+                        <p class="text-sm text-slate-300">Total del pedido</p>
+                        <p id="grand-total-original" class="hidden text-xl text-slate-500 line-through"></p>
+                        <p id="grand-total" class="mt-2 text-5xl font-semibold text-white">0,00 €</p>
+                        <p id="discount-badge" class="hidden mt-1 text-sm font-semibold text-emerald-400">− 10 % pronto pago aplicado</p>
+                        <p id="lines-summary" class="mt-1 text-sm text-slate-400">Sin productos seleccionados</p>
+                    </div>
+                    <button
+                        type="submit"
+                        id="submit-btn"
+                        disabled
+                        class="rounded-full bg-cyan px-8 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-40"
+                    >
+                        Confirmar pedido
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function () {
+    var rows         = document.querySelectorAll('#order-form tbody tr[data-price]');
+    var grandTotal   = document.getElementById('grand-total');
+    var grandOrig    = document.getElementById('grand-total-original');
+    var discBadge    = document.getElementById('discount-badge');
+    var summary      = document.getElementById('lines-summary');
+    var submitBtn    = document.getElementById('submit-btn');
+    var checkInput   = document.getElementById('early-payment-check');
+    var checkBoxUI   = document.getElementById('check-box-ui');
+    var checkIcon    = document.getElementById('check-icon');
+
+    function fmt(n) {
+        return n.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    }
+
+    function recalc() {
+        var earlyPayment = checkInput.checked;
+        var total = 0;
+        var lines = 0;
+        rows.forEach(function (row) {
+            var priceUnit = parseFloat(row.dataset.price) || 0;
+            var upb       = parseInt(row.dataset.upb) || 1;
+            var priceBox  = priceUnit * upb;
+            var qty = parseInt(row.querySelector('.qty-input').value) || 0;
+            var sub = priceBox * qty;
+            row.querySelector('.price-box').textContent = fmt(priceBox);
+            row.querySelector('.subtotal').textContent  = fmt(sub);
+            total += sub;
+            if (qty > 0) lines++;
+        });
+
+        if (earlyPayment && total > 0) {
+            grandOrig.textContent = fmt(total);
+            grandOrig.classList.remove('hidden');
+            grandTotal.textContent = fmt(total * 0.90);
+            discBadge.classList.remove('hidden');
+        } else {
+            grandOrig.classList.add('hidden');
+            grandTotal.textContent = fmt(total);
+            discBadge.classList.add('hidden');
+        }
+
+        if (lines === 0) {
+            summary.textContent = 'Sin productos seleccionados';
+            submitBtn.disabled = true;
+        } else if (lines === 1) {
+            summary.textContent = '1 producto seleccionado';
+            submitBtn.disabled = false;
+        } else {
+            summary.textContent = lines + ' productos seleccionados';
+            submitBtn.disabled = false;
+        }
+    }
+
+    rows.forEach(function (row) {
+        row.querySelector('.qty-input').addEventListener('input', recalc);
+    });
+
+    // Custom checkbox visual
+    checkInput.addEventListener('change', function () {
+        if (this.checked) {
+            checkBoxUI.classList.add('border-emerald-400', 'bg-emerald-400/20');
+            checkIcon.classList.remove('hidden');
+        } else {
+            checkBoxUI.classList.remove('border-emerald-400', 'bg-emerald-400/20');
+            checkIcon.classList.add('hidden');
+        }
+        recalc();
+    });
+
+    recalc();
+})();
+</script>
+{% endblock %}

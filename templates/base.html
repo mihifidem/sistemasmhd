@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ request.LANGUAGE_CODE|default:'es' }}" class="scroll-smooth">
+<head>
+    <script>if(localStorage.getItem('mhd-theme')==='light')document.documentElement.classList.add('light');</script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}MHD Platform{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#0f172a',
+                        cyan: '#22d3ee',
+                    },
+                    boxShadow: {
+                        glow: '0 25px 80px rgba(34, 211, 238, 0.18)',
+                    },
+                    fontFamily: {
+                        sans: ['Space Grotesk', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    },
+                },
+            },
+        };
+    </script>
+    <link rel="icon" type="image/svg+xml" href="{% static 'img/favicon.svg' %}">
+    <link rel="stylesheet" href="{% static 'css/site.css' %}">
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body
+    class="bg-slate-950 text-slate-100 antialiased selection:bg-cyan/30 selection:text-white dark:bg-slate-950 dark:text-slate-100">
+    <div class="fixed inset-0 -z-10 overflow-hidden">
+        <div
+            class="absolute inset-x-0 top-0 h-[36rem] bg-[radial-gradient(circle_at_top,_rgba(34,211,238,0.24),_transparent_52%)]">
+        </div>
+        <div class="absolute right-[-10rem] top-28 h-80 w-80 rounded-full bg-cyan/10 blur-3xl"></div>
+        <div class="absolute left-[-8rem] top-96 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl"></div>
+    </div>
+    {% include 'components/navbar.html' %}
+    {% if messages %}
+    <div class="mx-auto max-w-7xl px-6 pt-4">
+        {% for message in messages %}
+        <div class="mb-3 rounded-2xl border border-cyan/30 bg-white/5 px-4 py-3 text-sm text-slate-200 backdrop-blur">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    {% include 'components/footer.html' %}
+    {% include 'components/chat_widget.html' %}
+    <style>
+    /* ── Light mode — inline at end of body, wins over Tailwind CDN head styles ── */
+    html.light { color-scheme: light; }
+    html.light body {
+        background-color: #f1f5f9 !important;
+        background-image: none !important;
+        color: #0f172a !important;
+    }
+    html.light header,
+    html.light nav {
+        background-color: rgba(255,255,255,0.95) !important;
+        border-color: rgba(0,0,0,0.1) !important;
+    }
+    html.light header a,
+    html.light header span,
+    html.light header button {
+        color: #0f172a !important;
+    }
+    html.light section,
+    html.light main {
+        background-color: transparent !important;
+    }
+    html.light [class*="bg-slate-9"],
+    html.light [class*="bg-slate-8"] {
+        background-color: #f1f5f9 !important;
+    }
+    html.light [class*="bg-slate-7"],
+    html.light [class*="bg-slate-6"] {
+        background-color: #e2e8f0 !important;
+    }
+    html.light [class*="bg-white/"] {
+        background-color: rgba(0,0,0,0.04) !important;
+    }
+    html.light [class*="border-white/"] {
+        border-color: rgba(0,0,0,0.12) !important;
+    }
+    html.light [class*="text-white"] {
+        color: #0f172a !important;
+    }
+    html.light [class*="text-slate-1"],
+    html.light [class*="text-slate-2"],
+    html.light [class*="text-slate-3"] {
+        color: #334155 !important;
+    }
+    html.light [class*="text-slate-4"],
+    html.light [class*="text-slate-5"] {
+        color: #64748b !important;
+    }
+    html.light .text-cyan {
+        color: #0891b2 !important;
+    }
+    html.light footer {
+        background-color: #e2e8f0 !important;
+        border-color: rgba(0,0,0,0.1) !important;
+    }
+    html.light footer * {
+        color: #334155 !important;
+    }
+    html.light .fixed.inset-0 > div {
+        opacity: 0.06 !important;
+    }
+    html.light [class*="border"] {
+        border-color: rgba(0,0,0,0.1) !important;
+    }
+    html.light input,
+    html.light select,
+    html.light textarea {
+        color: #0f172a !important;
+        background-color: rgba(255,255,255,0.85) !important;
+        border-color: rgba(0,0,0,0.15) !important;
+    }
+    html.light input::placeholder,
+    html.light textarea::placeholder {
+        color: #64748b !important;
+    }
+    </style>
+    <script src="{% static 'js/site.js' %}"></script>
+    <script>
+    // ── Dark / Light toggle ──────────────────────────────────────────────
+    (function () {
+        var html = document.documentElement;
+
+        function apply(theme) {
+            if (theme === 'light') {
+                html.classList.add('light');
+            } else {
+                html.classList.remove('light');
+            }
+            localStorage.setItem('mhd-theme', theme);
+            var iconL = document.getElementById('icon-light');
+            var iconD = document.getElementById('icon-dark');
+            if (iconL) iconL.classList.toggle('hidden', theme !== 'light');
+            if (iconD) iconD.classList.toggle('hidden', theme === 'light');
+        }
+
+        // Restaurar preferencia guardada (sin crashear si iconos no existen aún)
+        apply(localStorage.getItem('mhd-theme') || 'dark');
+
+        // Click listener
+        var btn = document.getElementById('theme-toggle');
+        if (btn) {
+            btn.addEventListener('click', function () {
+                apply(html.classList.contains('light') ? 'dark' : 'light');
+            });
+        }
+    })();
+    </script>
+    {% block extra_js %}{% endblock %}
+
+    <!-- Scroll to top button -->
+    <button id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+        aria-label="Volver arriba"
+        class="fixed bottom-6 right-6 z-40 flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-slate-900/80 text-slate-400 shadow-lg backdrop-blur-sm transition-all duration-300 hover:border-cyan/40 hover:text-cyan hover:shadow-glow opacity-0 pointer-events-none translate-y-2">
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 15.75 12 8.25l7.5 7.5"/>
+        </svg>
+    </button>
+    <script>
+    (function(){
+        const btn = document.getElementById('scroll-top-btn');
+        window.addEventListener('scroll', function(){
+            if (window.scrollY > 300) {
+                btn.classList.remove('opacity-0','pointer-events-none','translate-y-2');
+                btn.classList.add('opacity-100','pointer-events-auto','translate-y-0');
+            } else {
+                btn.classList.add('opacity-0','pointer-events-none','translate-y-2');
+                btn.classList.remove('opacity-100','pointer-events-auto','translate-y-0');
+            }
+        }, { passive: true });
+    })();
+    </script>
+</body>
+
+</html>

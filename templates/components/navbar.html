@@ -1,0 +1,45 @@
+{% load i18n static %}
+<header class="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <a href="{% url 'core:home' %}" class="flex items-center gap-3 text-lg font-semibold tracking-wide text-white">
+            <img src="{% static 'img/mhd.png' %}" alt="MHD Platform" class="h-12 w-auto md:h-14" loading="eager">
+        </a>
+        <div class="hidden items-center gap-8 text-sm text-slate-300 md:flex">
+            <a href="{% url 'core:home' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Inicio{% else %}Home{% endif %}</a>
+            <a href="{% url 'core:how_it_works' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Tecnologia{% else %}Technology{% endif %}</a>
+            <a href="{% url 'products:catalog' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Productos{% else %}Products{% endif %}</a>
+            <a href="{% url 'distributors:installer_locator' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Instaladores{% else %}Installers{% endif %}</a>
+            <a href="{% url 'blog:list' %}" class="transition hover:text-cyan">Blog</a>
+            <a href="{% url 'products:resources' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Recursos{% else %}Resources{% endif %}</a>
+            <a href="{% url 'support:faq' %}" class="transition hover:text-cyan">FAQ</a>
+        </div>
+        <div class="flex items-center gap-3">
+            <!-- Toggle dark/light -->
+            <button id="theme-toggle" aria-label="Cambiar tema"
+                class="rounded-full border border-white/15 p-2 text-slate-300 transition hover:border-cyan/60 hover:text-cyan">
+                <!-- Sol (light) -->
+                <svg id="icon-light" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m8.66-9H21M3 12H2m15.36-6.36-.71.71M6.34 17.66l-.71.71M17.66 17.66l.71.71M6.34 6.34l-.71-.71M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+                </svg>
+                <!-- Luna (dark) -->
+                <svg id="icon-dark" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
+                </svg>
+            </button>
+            {% if request.user.is_authenticated %}
+                <span class="hidden text-sm text-slate-300 md:flex items-center gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-cyan" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                    {% if distributor_profile %}{{ distributor_profile.company_name }}{% else %}{{ request.user.get_full_name|default:request.user.username }}{% endif %}
+                </span>
+                <a href="{% url 'distributors:dashboard' %}" class="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-100 transition hover:border-cyan/60 hover:bg-white/5">{% if request.LANGUAGE_CODE == 'es' %}Portal{% else %}Portal{% endif %}</a>
+                <form method="post" action="{% url 'logout' %}" class="inline">
+                    {% csrf_token %}
+                    <button type="submit" class="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:-translate-y-0.5">{% if request.LANGUAGE_CODE == 'es' %}Salir{% else %}Logout{% endif %}</button>
+                </form>
+            {% else %}
+                <a href="{% url 'login' %}" class="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-100 transition hover:border-cyan/60 hover:bg-white/5">{% if request.LANGUAGE_CODE == 'es' %}Iniciar sesion{% else %}Login{% endif %}</a>
+                <a href="{% url 'distributors:register' %}" class="rounded-full bg-cyan px-4 py-2 text-sm font-medium text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">{% if request.LANGUAGE_CODE == 'es' %}Quiero ser distribuidor{% else %}Become a distributor{% endif %}</a>
+            {% endif %}
+        </div>
+    </nav>
+</header>

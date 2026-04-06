@@ -1,0 +1,44 @@
+{% load i18n %}
+<footer class="mt-24 border-t border-white/10 bg-slate-950/70">
+    <div class="mx-auto grid max-w-7xl gap-10 px-6 py-12 md:grid-cols-5">
+        <div>
+            <h3 class="text-lg font-semibold text-white">MHD Platform</h3>
+            <p class="mt-4 text-sm leading-6 text-slate-400">{% if request.LANGUAGE_CODE == 'es' %}Soluciones magnetohidrodinamicas para tratamiento de agua, optimizacion de combustion y redes modernas de instaladores.{% else %}Magnetohydrodynamic solutions for water treatment, combustion optimization, and modern installer networks.{% endif %}</p>
+        </div>
+        <div>
+            <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">{% if request.LANGUAGE_CODE == 'es' %}Productos{% else %}Products{% endif %}</h4>
+            <ul class="mt-4 space-y-3 text-sm text-slate-300">
+                <li>MHD Agua</li>
+                <li>MHD Gas</li>
+                <li>{% if request.LANGUAGE_CODE == 'es' %}Red de instaladores{% else %}Installer network{% endif %}</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">{% if request.LANGUAGE_CODE == 'es' %}Recursos{% else %}Resources{% endif %}</h4>
+            <ul class="mt-4 space-y-3 text-sm text-slate-300">
+                <li><a href="{% url 'blog:list' %}" class="transition hover:text-cyan">Blog</a></li>
+                <li><a href="{% url 'support:faq' %}" class="transition hover:text-cyan">FAQ</a></li>
+                <li><a href="{% url 'products:resources' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Recursos MHD{% else %}MHD Resources{% endif %}</a></li>
+                <li><a href="{% url 'core:how_it_works' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Tecnologia{% else %}Technology{% endif %}</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">{% if request.LANGUAGE_CODE == 'es' %}Contacto{% else %}Contact{% endif %}</h4>
+            <ul class="mt-4 space-y-3 text-sm text-slate-300">
+                <li>{% if request.LANGUAGE_CODE == 'es' %}Barcelona, España{% else %}Barcelona, Spain{% endif %}</li>
+                <li>info@sistemasmhd.com</li>
+                <li>+34 93 265 02 64</li>
+            </ul>
+        </div>
+        <div>
+            <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">{% if request.LANGUAGE_CODE == 'es' %}Distribuidores{% else %}Distributors{% endif %}</h4>
+            <ul class="mt-4 space-y-3 text-sm text-slate-300">
+                <li><a href="{% url 'login' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Acceso portal{% else %}Portal login{% endif %}</a></li>
+                <li><a href="{% url 'distributors:register' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Hazte distribuidor{% else %}Become a distributor{% endif %}</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="border-t border-white/10 py-5 text-center text-xs text-slate-500">
+        © 2026 MHD Platform — Made with ♥ in Barcelona by mihifidem
+    </div>
+</footer>

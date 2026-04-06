@@ -1,0 +1,26 @@
+{% load static %}
+<div class="flip-card rounded-[2rem] border border-white/10 overflow-hidden">
+    <div class="flip-card-inner">
+        <!-- Front: Image -->
+        <div class="flip-card-front rounded-[2rem] overflow-hidden relative">
+            <img src="{% static 'img/'|add:product.slug|add:'.jpg' %}" alt="{{ product.name }}" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                <div>
+                    <p class="text-xs uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Producto{% else %}Product{% endif %}</p>
+                    <h3 class="mt-2 text-2xl font-semibold text-white">{{ product.name }}</h3>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Back: Information -->
+        <div class="flip-card-back">
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs text-slate-400 mb-1">{% if request.LANGUAGE_CODE == 'es' %}Descripción{% else %}Description{% endif %}</p>
+                    <p class="text-sm leading-5 text-slate-200">{{ product.description }}</p>
+                </div>
+                <a href="{{ product.get_absolute_url }}" class="block mt-4 rounded-full border border-cyan bg-cyan/10 px-4 py-2 text-sm text-cyan transition hover:bg-cyan/20 text-center w-fit mx-auto">{% if request.LANGUAGE_CODE == 'es' %}Ver detalle{% else %}View details{% endif %}</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}B2B Product Catalog{% endblock %}
+
+{% block content %}
+<section class="mx-auto grid max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[280px_1fr]">
+    {% include 'components/portal_nav.html' %}
+    <div>
+        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <p class="text-sm uppercase tracking-[0.3em] text-cyan">Catalog</p>
+            <h1 class="mt-4 text-4xl font-semibold text-white">Distributor product catalog</h1>
+        </div>
+        <div class="mt-8 grid gap-6 xl:grid-cols-2">
+            {% for product in products %}
+                {% include 'components/product_card.html' %}
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

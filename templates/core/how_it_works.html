@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+
+{% block title %}Tecnología MHD{% endblock %}
+
+{% block content %}
+
+<section class="mx-auto max-w-6xl px-6 py-20">
+
+    <!-- HERO -->
+    <p class="text-sm uppercase tracking-[0.3em] text-cyan">Tecnología Magneto Hidrodinámica</p>
+    <h1 class="mt-4 text-5xl font-semibold text-white">
+        Optimización avanzada de agua y gas mediante campos magnéticos
+    </h1>
+    <p class="mt-6 text-slate-400 max-w-3xl">
+        La tecnología MHD permite modificar el comportamiento físico de los fluidos,
+        mejorando la eficiencia energética, reduciendo incrustaciones y optimizando procesos térmicos.
+    </p>
+
+    <!-- TABS -->
+    <div class="mt-12 flex gap-4">
+        <button onclick="showTab('basico')" id="tabBtn1"
+            class="px-6 py-3 rounded-full bg-cyan text-black font-semibold">
+            🏠 Usuario
+        </button>
+
+        <button onclick="showTab('tecnico')" id="tabBtn2"
+            class="px-6 py-3 rounded-full bg-slate-700 text-white">
+            🔧 Técnico
+        </button>
+    </div>
+
+    <div class="mt-12">
+
+        <!-- ================= BASICO ================= -->
+        <div id="basico" class="tab-content space-y-10 text-slate-300">
+
+            <div>
+                <h2 class="text-2xl text-white">¿Qué hace realmente la tecnología MHD?</h2>
+                <p>
+                    MHD actúa como un “ordenador invisible” del agua y el gas, reorganizando cómo se comportan.
+                    Esto evita problemas como la cal o el desperdicio de energía en la combustión.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-slate-800 p-6 rounded-xl">
+                    <h3 class="text-cyan text-xl">💧 Agua</h3>
+                    <p>Evita incrustaciones de cal y mejora el flujo.</p>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-xl">
+                    <h3 class="text-orange-400 text-xl">🔥 Gas</h3>
+                    <p>Optimiza la combustión y reduce el consumo.</p>
+                </div>
+            </div>
+
+            <div>
+                <h2 class="text-2xl text-white">Resultados</h2>
+                <ul class="list-disc pl-6">
+                    <li>Menos averías</li>
+                    <li>Ahorro energético</li>
+                    <li>Mayor eficiencia</li>
+                </ul>
+            </div>
+
+        </div>
+
+        <!-- ================= TECNICO ================= -->
+        <div id="tecnico" class="tab-content hidden space-y-12 text-slate-300">
+
+            <!-- FUNDAMENTO -->
+            <div>
+                <h2 class="text-2xl text-white">Fundamento físico</h2>
+                <p>
+                    La MHD describe la interacción entre campos magnéticos y fluidos conductores.
+                    En sistemas domésticos, el campo magnético induce reorganización molecular
+                    sin alterar la composición química.
+                </p>
+            </div>
+
+            <!-- AGUA -->
+            <div>
+                <h2 class="text-2xl text-cyan">💧 Tratamiento del agua</h2>
+                <p>
+                    Se modifica la cristalización del CaCO₃ promoviendo aragonito,
+                    reduciendo la adherencia en superficies metálicas.
+                </p>
+                <ul class="list-disc pl-6">
+                    <li>Menor fouling térmico</li>
+                    <li>Mejor intercambio de calor</li>
+                    <li>Mayor eficiencia hidráulica</li>
+                </ul>
+            </div>
+
+            <!-- GAS -->
+            <div>
+                <h2 class="text-2xl text-orange-400">🔥 Tratamiento del gas</h2>
+                <p>
+                    Mejora la mezcla aire-combustible mediante orientación molecular,
+                    optimizando la combustión.
+                </p>
+                <ul class="list-disc pl-6">
+                    <li>Reducción de CO</li>
+                    <li>Mejor eficiencia térmica</li>
+                    <li>Combustión más estable</li>
+                </ul>
+            </div>
+
+            <!-- GRAFICO -->
+            <div>
+                <h2 class="text-2xl text-white">📊 Comparativa de eficiencia</h2>
+
+                <div class="bg-slate-800 p-6 rounded-xl mt-6">
+                    <p class="mb-6">Comparación entre sistema convencional vs MHD:</p>
+
+                    <!-- BARRAS -->
+                    <div class="space-y-4">
+
+                        <div>
+                            <p>Sin MHD (eficiencia)</p>
+                            <div class="w-full bg-slate-700 h-4 rounded">
+                                <div class="bg-red-500 h-4 rounded" style="width:60%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p>Con MHD (eficiencia)</p>
+                            <div class="w-full bg-slate-700 h-4 rounded">
+                                <div class="bg-green-500 h-4 rounded" style="width:85%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p>Incrustaciones sin MHD</p>
+                            <div class="w-full bg-slate-700 h-4 rounded">
+                                <div class="bg-red-500 h-4 rounded" style="width:80%"></div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p>Incrustaciones con MHD</p>
+                            <div class="w-full bg-slate-700 h-4 rounded">
+                                <div class="bg-green-500 h-4 rounded" style="width:20%"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- VIDEOS -->
+    <div class="mt-20">
+        <h2 class="text-3xl text-white mb-8">🎥 Vídeos explicativos</h2>
+
+        <div class="grid md:grid-cols-2 gap-8">
+
+            <iframe class="w-full h-64 rounded-lg"
+                src="https://www.youtube.com/embed/6oWz7zZJ5P8"
+                allowfullscreen></iframe>
+
+            <iframe class="w-full h-64 rounded-lg"
+                src="https://www.youtube.com/embed/9lX7WcK9KpY"
+                allowfullscreen></iframe>
+
+            <iframe class="w-full h-64 rounded-lg"
+                src="https://www.youtube.com/embed/3xTzZkH5X2Q"
+                allowfullscreen></iframe>
+
+            <iframe class="w-full h-64 rounded-lg"
+                src="https://www.youtube.com/embed/FW2y9h9vFQ0"
+                allowfullscreen></iframe>
+
+        </div>
+    </div>
+
+</section>
+
+<script>
+function showTab(tab) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.getElementById(tab).classList.remove('hidden');
+
+    document.getElementById('tabBtn1').classList.remove('bg-cyan','text-black');
+    document.getElementById('tabBtn1').classList.add('bg-slate-700','text-white');
+
+    document.getElementById('tabBtn2').classList.remove('bg-cyan','text-black');
+    document.getElementById('tabBtn2').classList.add('bg-slate-700','text-white');
+
+    if(tab === 'basico'){
+        document.getElementById('tabBtn1').classList.add('bg-cyan','text-black');
+    } else {
+        document.getElementById('tabBtn2').classList.add('bg-cyan','text-black');
+    }
+}
+</script>
+
+{% endblock %}

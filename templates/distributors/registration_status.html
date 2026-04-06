@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Registration Status{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-3xl px-6 py-16">
+    <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <h1 class="text-4xl font-semibold text-white">Distributor registration status</h1>
+        {% if profile %}
+            <p class="mt-4 text-slate-300">Company: {{ profile.company_name }}</p>
+            <p class="mt-2 text-slate-300">Status: <span class="text-cyan">{{ profile.get_status_display }}</span></p>
+        {% else %}
+            <p class="mt-4 text-slate-300">Your registration is pending. You can log in after approval if an account already exists.</p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

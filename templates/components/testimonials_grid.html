@@ -1,0 +1,116 @@
+<section class="mx-auto max-w-5xl px-6 py-12">
+    <p class="text-sm uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Testimonios{% else %}Testimonials{% endif %}</p>
+    <h2 class="mt-3 text-3xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}TESTIMONIOS DE CLIENTES Y DE NUESTROS DISTRIBUIDORES{% else %}TESTIMONIALS FROM CLIENTS AND OUR DISTRIBUTORS{% endif %}</h2>
+
+    <!-- Carousel -->
+    <div class="relative mt-8 overflow-hidden" id="testi-carousel">
+        <!-- Track -->
+        <div id="testi-track" class="flex transition-transform duration-700 ease-in-out">
+            {% for item in testimonials %}
+            <article class="testi-slide min-w-full sm:min-w-[50%] lg:min-w-[33.333%] px-2">
+                <div class="h-full rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+                <svg class="mb-4 h-6 w-6 text-cyan" fill="currentColor" viewBox="0 0 24 24"><path d="M7.17 17c.51 0 .98-.29 1.2-.74l1.42-2.84c.14-.28.21-.58.21-.89V8c0-.55-.45-1-1-1H5c-.55 0-1 .45-1 1v5c0 .55.45 1 1 1h2l-1.03 2.06c-.45.89.2 1.94 1.2 1.94zm10 0c.51 0 .98-.29 1.2-.74l1.42-2.84c.14-.28.21-.58.21-.89V8c0-.55-.45-1-1-1h-4c-.55 0-1 .45-1 1v5c0 .55.45 1 1 1h2l-1.03 2.06c-.45.89.2 1.94 1.2 1.94z"/></svg>
+                <p class="text-base leading-7 text-slate-200">{{ item.quote }}</p>
+                <div class="mt-6 flex items-center gap-3">
+                    <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-cyan/20 text-sm font-semibold text-cyan">
+                        {{ item.author|first }}
+                    </div>
+                    <div>
+                        <p class="font-semibold text-white">{{ item.author }}</p>
+                        <p class="text-xs text-slate-400">{{ item.role }}</p>
+                    </div>
+                </div>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+        <button id="testi-prev" aria-label="Anterior" class="absolute left-0 top-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-slate-900/80 p-2 text-slate-300 transition hover:text-cyan focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        </button>
+        <button id="testi-next" aria-label="Siguiente" class="absolute right-0 top-1/2 -translate-y-1/2 rounded-full border border-white/10 bg-slate-900/80 p-2 text-slate-300 transition hover:text-cyan focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        </button>
+    </div>
+
+    <!-- Dots -->
+    <div id="testi-dots" class="mt-5 flex justify-center gap-2"></div>
+</section>
+
+<script>
+(function () {
+    const track   = document.getElementById('testi-track');
+    const dotsEl  = document.getElementById('testi-dots');
+    const slides  = Array.from(track.querySelectorAll('.testi-slide'));
+    let current   = 0;
+    let perView   = 1;
+    let total     = slides.length;
+    let autoTimer = null;
+
+    function getPerView() {
+        if (window.innerWidth >= 1024) return 3;
+        if (window.innerWidth >= 640)  return 2;
+        return 1;
+    }
+
+    function maxIndex() { return Math.max(0, total - perView); }
+
+    function buildDots() {
+        dotsEl.innerHTML = '';
+        const count = maxIndex() + 1;
+        for (let i = 0; i < count; i++) {
+            const d = document.createElement('button');
+            d.className = 'h-2 rounded-full transition-all duration-300 ' +
+                (i === current ? 'w-6 bg-cyan' : 'w-2 bg-white/20 hover:bg-white/40');
+            d.setAttribute('aria-label', 'Ir al testimonio ' + (i + 1));
+            d.addEventListener('click', () => goTo(i));
+            dotsEl.appendChild(d);
+        }
+    }
+
+    function updateDots() {
+        const dotBtns = dotsEl.querySelectorAll('button');
+        dotBtns.forEach((d, i) => {
+            d.className = 'h-2 rounded-full transition-all duration-300 ' +
+                (i === current ? 'w-6 bg-cyan' : 'w-2 bg-white/20 hover:bg-white/40');
+        });
+    }
+
+    function goTo(idx) {
+        current = Math.max(0, Math.min(idx, maxIndex()));
+        const pct = (100 / perView) * current;
+        track.style.transform = 'translateX(-' + pct + '%)';
+        updateDots();
+    }
+
+    function next() { goTo(current >= maxIndex() ? 0 : current + 1); }
+    function prev() { goTo(current <= 0 ? maxIndex() : current - 1); }
+
+    function startAuto() {
+        stopAuto();
+        autoTimer = setInterval(next, 4000);
+    }
+    function stopAuto() { clearInterval(autoTimer); }
+
+    function init() {
+        perView = getPerView();
+        slides.forEach(s => {
+            s.style.minWidth = (100 / perView) + '%';
+        });
+        if (current > maxIndex()) current = 0;
+        goTo(current);
+        buildDots();
+        startAuto();
+    }
+
+    document.getElementById('testi-prev').addEventListener('click', () => { prev(); startAuto(); });
+    document.getElementById('testi-next').addEventListener('click', () => { next(); startAuto(); });
+
+    // pause on hover
+    const carousel = document.getElementById('testi-carousel');
+    carousel.addEventListener('mouseenter', stopAuto);
+    carousel.addEventListener('mouseleave', startAuto);
+
+    window.addEventListener('resize', init);
+    init();
+})();
+</script>

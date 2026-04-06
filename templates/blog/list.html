@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}MHD Blog{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-7xl px-6 py-16">
+    <p class="text-sm uppercase tracking-[0.3em] text-cyan">Blog</p>
+    <h1 class="mt-4 text-5xl font-semibold text-white">Insights sobre calderas, cal y eficiencia.</h1>
+
+    <!-- Buscador + filtros -->
+    <div class="mt-8 flex flex-wrap items-center gap-3">
+        <div class="flex flex-1 min-w-[16rem] items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-5 py-3 backdrop-blur-xl max-w-xl">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+            </svg>
+            <input id="blog-search" type="text" autocomplete="off" placeholder="Buscar artículo…"
+                class="flex-1 bg-transparent text-sm text-white placeholder:text-slate-500 focus:outline-none">
+            <span id="blog-count" class="shrink-0 text-xs text-slate-500"></span>
+        </div>
+        {% if is_distributor %}
+        <button id="btn-filter-distrib"
+            class="flex items-center gap-2 rounded-2xl border border-cyan/30 bg-cyan/10 px-4 py-3 text-sm font-medium text-cyan transition hover:bg-cyan/20 data-[active]:border-cyan data-[active]:bg-cyan data-[active]:text-slate-950" aria-pressed="false">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+            </svg>
+            Solo distribuidores
+        </button>
+        {% endif %}
+    </div>
+
+    <!-- Grid de posts -->
+    <div id="blog-grid" class="mt-10 grid gap-6 lg:grid-cols-3">
+        {% for post in posts %}
+        <article class="blog-card rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl"
+            data-title="{{ post.title|lower }}"
+            data-desc="{{ post.meta_description|default:post.content|truncatechars:200|lower }}"
+            data-distrib="{{ post.distributors_only|yesno:'true,false' }}">
+            <div class="flex items-center justify-between gap-2">
+                <p class="text-sm text-slate-400">{{ post.publish_date|date:'d M Y' }}</p>
+                {% if post.distributors_only %}
+                <span class="rounded-full bg-cyan/15 px-2 py-0.5 text-xs font-medium text-cyan">Solo distribuidores</span>
+                {% endif %}
+            </div>
+            <h2 class="mt-4 text-2xl font-semibold text-white blog-title">{{ post.title }}</h2>
+            <p class="mt-4 text-sm leading-6 text-slate-300">{{ post.meta_description|default:post.content|truncatechars:150 }}</p>
+            <a href="{{ post.get_absolute_url }}" class="mt-6 inline-block text-sm font-semibold text-cyan hover:opacity-80 transition">Leer artículo →</a>
+        </article>
+        {% empty %}
+        <p class="text-slate-400 lg:col-span-3">Aún no hay artículos publicados.</p>
+        {% endfor %}
+    </div>
+    <p id="blog-no-match" class="hidden mt-10 text-center text-sm text-slate-400">Ningún artículo coincide con tu búsqueda.</p>
+</section>
+
+<script>
+(function () {
+    const input      = document.getElementById('blog-search');
+    const btnDistrib = document.getElementById('btn-filter-distrib');
+    const cards      = Array.from(document.querySelectorAll('.blog-card'));
+    const countEl    = document.getElementById('blog-count');
+    const noMatch    = document.getElementById('blog-no-match');
+    let onlyDistrib  = false;
+
+    function update() {
+        const q = input.value.trim().toLowerCase();
+        let visible = 0;
+        cards.forEach(card => {
+            const textMatch = !q ||
+                card.dataset.title.includes(q) ||
+                card.dataset.desc.includes(q);
+            const distribMatch = !onlyDistrib || card.dataset.distrib === 'true';
+            const show = textMatch && distribMatch;
+            card.style.display = show ? '' : 'none';
+            if (show) visible++;
+        });
+        countEl.textContent = (q || onlyDistrib) ? visible + ' resultado' + (visible !== 1 ? 's' : '') : '';
+        noMatch.classList.toggle('hidden', visible > 0);
+    }
+
+    input.addEventListener('input', update);
+
+    if (btnDistrib) {
+        btnDistrib.addEventListener('click', function () {
+            onlyDistrib = !onlyDistrib;
+            this.setAttribute('aria-pressed', onlyDistrib);
+            if (onlyDistrib) {
+                this.dataset.active = '';
+            } else {
+                delete this.dataset.active;
+            }
+            update();
+        });
+    }
+
+    update();
+})();
+</script>
+{% endblock %}

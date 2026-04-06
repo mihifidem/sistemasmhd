@@ -1,0 +1,11 @@
+<section class="mx-auto max-w-7xl px-6 py-12">
+    <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <p class="text-sm uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Beneficios{% else %}Benefits{% endif %}</p>
+        <div class="mt-8 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div class="rounded-3xl border border-white/10 bg-slate-900/80 p-6"><h3 class="text-lg font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Menos cal{% else %}Less limescale{% endif %}</h3><p class="mt-3 text-sm text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}Reduce la adhesion mineral en componentes hidraulicos criticos.{% else %}Reduce mineral adhesion on critical hydraulic components.{% endif %}</p></div>
+            <div class="rounded-3xl border border-white/10 bg-slate-900/80 p-6"><h3 class="text-lg font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Mayor eficiencia{% else %}Improved efficiency{% endif %}</h3><p class="mt-3 text-sm text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}Favorece mejor transferencia termica y una combustion mas estable.{% else %}Support better heat transfer and more stable combustion behavior.{% endif %}</p></div>
+            <div class="rounded-3xl border border-white/10 bg-slate-900/80 p-6"><h3 class="text-lg font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Menor mantenimiento{% else %}Reduced maintenance{% endif %}</h3><p class="mt-3 text-sm text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}Disminuye la frecuencia de intervenciones por problemas de incrustaciones.{% else %}Lower service intervention frequency on scaling-related issues.{% endif %}</p></div>
+            <div class="rounded-3xl border border-white/10 bg-slate-900/80 p-6"><h3 class="text-lg font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Instalacion rapida{% else %}Quick installation{% endif %}</h3><p class="mt-3 text-sm text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}Se integra en sistemas existentes con minima interrupcion operativa.{% else %}Integrate into existing systems with minimal operational disruption.{% endif %}</p></div>
+        </div>
+    </div>
+</section>

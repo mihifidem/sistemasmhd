@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Mis Pedidos — MHD Portal{% endblock %}
+
+{% block content %}
+<section class="mx-auto grid max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[280px_1fr]">
+    {% include 'components/portal_nav.html' %}
+
+    <div class="space-y-6">
+        <div class="flex items-center justify-between gap-4 rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+            <div>
+                <p class="text-sm uppercase tracking-[0.3em] text-cyan">Portal distribuidor</p>
+                <h1 class="mt-2 text-4xl font-semibold text-white">Mis pedidos</h1>
+            </div>
+            <a href="{% url 'orders:new_order' %}" class="rounded-full bg-cyan px-5 py-2.5 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">
+                + Nuevo pedido
+            </a>
+        </div>
+
+        <div class="overflow-x-auto rounded-[2rem] border border-white/10 bg-white/5 backdrop-blur-xl">
+            {% if orders %}
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="border-b border-white/10 text-xs uppercase tracking-widest text-slate-400">
+                        <th class="px-6 py-4 text-left">Pedido</th>
+                        <th class="px-6 py-4 text-left">Fecha</th>
+                        <th class="px-6 py-4 text-center">Estado</th>
+                        <th class="px-6 py-4 text-right">Total</th>
+                        <th class="px-6 py-4 text-center">Ver</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                    {% for order in orders %}
+                    <tr class="transition hover:bg-white/[0.03]">
+                        <td class="px-6 py-4 font-semibold text-white">#{{ order.pk }}</td>
+                        <td class="px-6 py-4 text-slate-300">{{ order.created_at|date:'d/m/Y H:i' }}</td>
+                        <td class="px-6 py-4 text-center">
+                            {% if order.status == 'pending' %}
+                                <span class="rounded-full bg-amber-500/20 px-3 py-1 text-xs font-medium text-amber-300">Pendiente</span>
+                            {% elif order.status == 'confirmed' %}
+                                <span class="rounded-full bg-blue-500/20 px-3 py-1 text-xs font-medium text-blue-300">Confirmado</span>
+                            {% elif order.status == 'shipped' %}
+                                <span class="rounded-full bg-violet-500/20 px-3 py-1 text-xs font-medium text-violet-300">Enviado</span>
+                            {% elif order.status == 'delivered' %}
+                                <span class="rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-medium text-emerald-300">Entregado</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-right font-semibold text-white">{{ order.total_amount }} €</td>
+                        <td class="px-6 py-4 text-center">
+                            <a href="{% url 'orders:detail' order.pk %}" class="rounded-full border border-white/15 px-4 py-1.5 text-xs text-slate-300 transition hover:border-cyan/40 hover:text-cyan">Detalle</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="px-8 py-16 text-center">
+                <p class="text-slate-400">Aún no has realizado ningún pedido.</p>
+                <a href="{% url 'orders:new_order' %}" class="mt-4 inline-block rounded-full bg-cyan px-6 py-2.5 text-sm font-semibold text-slate-950">Hacer primer pedido</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

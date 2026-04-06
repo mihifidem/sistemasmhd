@@ -1,0 +1,278 @@
+{% load static %}
+<section class="mx-auto max-w-7xl px-6 pb-16 pt-16 lg:pt-24">
+    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+        <div>
+            <p class="text-sm font-medium uppercase tracking-[0.35em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}PROTECCION Y AHORRO PARA CALDERAS{% else %}Boiler protection for modern infrastructure{% endif %}</p>
+            <h1 class="mt-6 max-w-4xl text-5xl font-semibold leading-tight text-white md:text-5xl">{% if request.LANGUAGE_CODE == 'es' %}Protege tu caldera. Reduce la cal. Mejora la combustion.{% else %}Protect your boiler. Reduce limescale. Improve combustion.{% endif %}</h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}La tecnologia MHD usa campos magneticos controlados para influir en el comportamiento de fluidos y gases en circulacion, ayudando a reducir la adherencia de cal y favoreciendo una combustion más limpia en equipos térmicos.{% else %}MHD technology uses controlled magnetic fields to influence fluid and gas behavior in circulation systems, helping reduce limescale adhesion and supporting cleaner combustion performance in heating equipment.{% endif %}</p>
+            <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+                <a href="{% url 'core:how_it_works' %}" class="rounded-full bg-cyan px-6 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">{% if request.LANGUAGE_CODE == 'es' %}Ver como funciona{% else %}Learn how it works{% endif %}</a>
+                <button onclick="openInstallerModal()" class="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-cyan hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Buscar instalador{% else %}Find installer{% endif %}</button>
+            </div>
+        </div>
+        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-glow backdrop-blur-xl">
+            <div class="grid gap-4 sm:grid-cols-2">
+                <!-- MHD Agua Card -->
+                <div class="flip-card rounded-[2rem] border border-white/10">
+                    <div class="flip-card-inner">
+                        <!-- Front: Image -->
+                        <div class="flip-card-front rounded-[2rem] relative">
+                            <img src="{% static 'img/mhd_agua.jpg' %}" alt="MHD Agua" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                                <div>
+                                    <p class="text-xs uppercase tracking-[0.3em] text-cyan">Sistemas de agua</p>
+                                    <h3 class="mt-2 text-2xl font-semibold text-white">MHD Agua</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Back: Information -->
+                        <div class="flip-card-back">
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-xs text-slate-400 mb-1">Descripción</p>
+                                    <p class="text-sm leading-5 text-slate-200">{% if request.LANGUAGE_CODE == 'es' %}Reduce la formacion de cal en superficies de caldera y tuberias.{% else %}Reduces limescale formation on boiler and pipe surfaces.{% endif %}</p>
+                                </div>
+                                <a href="{% url 'products:detail' 'mhd-agua2' %}" class="block rounded-full border border-cyan bg-cyan/10 px-4 py-2 text-sm text-cyan transition hover:bg-cyan/20 text-center w-fit mx-auto">Ver detalle</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- MHD Gas Card -->
+                <div class="flip-card rounded-[2rem] border border-white/10">
+                    <div class="flip-card-inner">
+                        <!-- Front: Image -->
+                        <div class="flip-card-front rounded-[2rem] relative">
+                            <img src="{% static 'img/mhd_gas.jpg' %}" alt="MHD Gas" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                                <div>
+                                    <p class="text-xs uppercase tracking-[0.3em] text-cyan">Sistemas de gas</p>
+                                    <h3 class="mt-2 text-2xl font-semibold text-white">MHD Gas</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Back: Information -->
+                        <div class="flip-card-back">
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-xs text-slate-400 mb-1">Descripción</p>
+                                    <p class="text-sm leading-5 text-slate-200">{% if request.LANGUAGE_CODE == 'es' %}Favorece una mejor eficiencia de combustion en calderas de gas.{% else %}Supports improved combustion efficiency in gas boilers.{% endif %}</p>
+                                </div>
+                                <a href="{% url 'products:detail' 'mhd-gas2' %}" class="block rounded-full border border-cyan bg-cyan/10 px-4 py-2 text-sm text-cyan transition hover:bg-cyan/20 text-center w-fit mx-auto">Ver detalle</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="rounded-3xl border border-white/10 bg-gradient-to-br from-cyan/20 to-blue-500/20 p-6 sm:col-span-2">
+<p class="text-sm text-slate-300">
+{% if request.LANGUAGE_CODE == 'es' %}
+Diseñado para usuarios que buscan una solución fiable, fácil de usar y lista para disfrutar desde el primer momento, con una instalación sencilla y un rendimiento óptimo en el día a día.
+{% else %}
+Designed for end users looking for a reliable, easy-to-use solution that works out of the box, with simple setup and optimal performance in everyday use.
+{% endif %}
+</p>                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===== MODAL BUSCAR INSTALADOR ===== -->
+<style>
+  #modal-map .leaflet-popup-content-wrapper { background:#1e293b;color:#e2e8f0;border:1px solid rgba(255,255,255,.1);border-radius:1rem; }
+  #modal-map .leaflet-popup-tip { background:#1e293b; }
+  #modal-map .leaflet-popup-content { margin:10px 12px;font-family:'Space Grotesk',sans-serif;font-size:12px;line-height:1.5; }
+  #modal-map .leaflet-popup-content b { color:#22d3ee; }
+  #modal-map .leaflet-popup-content a { color:#94a3b8; text-decoration:none; }
+  #modal-map .leaflet-control-zoom a { background:#1e293b!important;color:#e2e8f0!important;border-color:rgba(255,255,255,.1)!important; }
+  #modal-map .leaflet-control-attribution { background:rgba(15,23,42,.8)!important;color:#475569!important; }
+</style>
+
+<div id="installer-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-sm" onclick="closeInstallerModal()"></div>
+    <!-- Panel -->
+    <div class="relative flex w-full max-w-4xl flex-col rounded-[2rem] border border-white/10 bg-slate-900 shadow-glow" style="max-height:88vh">
+        <!-- Header -->
+        <div class="flex items-center justify-between border-b border-white/10 px-6 py-5">
+            <div>
+                <p class="text-xs uppercase tracking-[0.3em] text-cyan">Red de distribuidores</p>
+                <h2 id="modal-title" class="mt-1 text-2xl font-semibold text-white">Buscar instalador</h2>
+            </div>
+            <div class="flex items-center gap-2">
+                <!-- Toggle lista / mapa -->
+                <div class="flex rounded-full border border-white/10 overflow-hidden text-sm">
+                    <button id="btn-view-list" onclick="modalShowList()"
+                        class="px-4 py-1.5 font-medium transition bg-cyan text-slate-950">Lista</button>
+                    <button id="btn-view-map" onclick="modalShowMap()"
+                        class="px-4 py-1.5 font-medium transition text-slate-300 hover:text-white">Mapa</button>
+                </div>
+                <button onclick="closeInstallerModal()" class="rounded-full p-2 text-slate-400 transition hover:bg-white/5 hover:text-white" aria-label="Cerrar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+        </div>
+        <!-- Filters (solo visibles en lista) -->
+        <div id="modal-filters" class="border-b border-white/10 px-6 py-4">
+            <div class="grid gap-3 sm:grid-cols-3">
+                <input id="f-name" type="text" autocomplete="off" placeholder="Nombre…"
+                    class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+                <input id="f-province" type="text" autocomplete="off" placeholder="Provincia…"
+                    class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+                <input id="f-city" type="text" autocomplete="off" placeholder="Ciudad…"
+                    class="rounded-2xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+            </div>
+            <p id="dist-count" class="mt-2 text-xs text-slate-500"></p>
+        </div>
+        <!-- Vista lista -->
+        <div id="dist-results" class="overflow-y-auto p-6">
+            <p class="text-center text-sm text-slate-400">Cargando distribuidores…</p>
+        </div>
+        <!-- Vista mapa -->
+        <div id="modal-map-wrap" class="hidden rounded-b-[2rem]">
+            <div id="modal-map" style="height:420px;"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+(function () {
+    let allDist = [];
+    let loaded = false;
+    let modalMap = null;
+    let markersGroup = null;
+
+    /* ---- abrir / cerrar ---- */
+    window.openInstallerModal = function () {
+        const modal = document.getElementById('installer-modal');
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        document.body.style.overflow = 'hidden';
+        if (!loaded) {
+            loaded = true;
+            ['f-name', 'f-province', 'f-city'].forEach(id =>
+                document.getElementById(id).addEventListener('input', window.filterDistributors)
+            );
+            fetch('{% url "distributors:search_json" %}')
+                .then(r => r.json())
+                .then(data => { allDist = data; renderDist(allDist); })
+                .catch(() => {
+                    document.getElementById('dist-results').innerHTML =
+                        '<p class="text-center text-sm text-slate-400">Error al cargar distribuidores.</p>';
+                });
+        }
+    };
+
+    window.closeInstallerModal = function () {
+        const modal = document.getElementById('installer-modal');
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+        document.body.style.overflow = '';
+    };
+
+    /* ---- toggle lista/mapa ---- */
+    window.modalShowList = function () {
+        document.getElementById('dist-results').classList.remove('hidden');
+        document.getElementById('modal-filters').classList.remove('hidden');
+        document.getElementById('modal-map-wrap').classList.add('hidden');
+        document.getElementById('btn-view-list').classList.add('bg-cyan','text-slate-950');
+        document.getElementById('btn-view-list').classList.remove('text-slate-300');
+        document.getElementById('btn-view-map').classList.remove('bg-cyan','text-slate-950');
+        document.getElementById('btn-view-map').classList.add('text-slate-300');
+    };
+
+    window.modalShowMap = function () {
+        document.getElementById('dist-results').classList.add('hidden');
+        document.getElementById('modal-filters').classList.add('hidden');
+        document.getElementById('modal-map-wrap').classList.remove('hidden');
+        document.getElementById('btn-view-map').classList.add('bg-cyan','text-slate-950');
+        document.getElementById('btn-view-map').classList.remove('text-slate-300');
+        document.getElementById('btn-view-list').classList.remove('bg-cyan','text-slate-950');
+        document.getElementById('btn-view-list').classList.add('text-slate-300');
+
+        setTimeout(function () {
+            if (!modalMap) {
+                modalMap = L.map('modal-map', { zoomControl: true }).setView([40.4, -3.7], 6);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                    attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>',
+                    subdomains: 'abcd', maxZoom: 19
+                }).addTo(modalMap);
+                markersGroup = L.layerGroup().addTo(modalMap);
+                renderMapMarkers(allDist);
+            }
+            modalMap.invalidateSize();
+        }, 120);
+    };
+
+    /* ---- filtrado ---- */
+    window.filterDistributors = function () {
+        const name = document.getElementById('f-name').value.toLowerCase();
+        const prov = document.getElementById('f-province').value.toLowerCase();
+        const city = document.getElementById('f-city').value.toLowerCase();
+        const filtered = allDist.filter(d =>
+            (!name || d.company_name.toLowerCase().includes(name)) &&
+            (!prov  || d.province.toLowerCase().includes(prov)) &&
+            (!city  || d.city.toLowerCase().includes(city))
+        );
+        renderDist(filtered);
+        if (markersGroup) renderMapMarkers(filtered);
+    };
+
+    /* ---- render lista ---- */
+    function renderDist(list) {
+        const container = document.getElementById('dist-results');
+        const countEl = document.getElementById('dist-count');
+        countEl.textContent = list.length === 0 ? 'Ningún resultado'
+            : list.length + ' distribuidor' + (list.length !== 1 ? 'es' : '');
+
+        if (list.length === 0) {
+            container.innerHTML = '<p class="text-center text-sm text-slate-400 py-8">Ningún distribuidor coincide con los filtros.</p>';
+            return;
+        }
+        container.innerHTML = '<div class="grid gap-4 sm:grid-cols-2">' +
+            list.map(d => `
+                <article class="rounded-2xl border border-white/10 bg-white/5 p-5">
+                    <div class="flex items-start justify-between gap-2">
+                        <h3 class="text-base font-semibold text-white leading-tight">${esc(d.company_name)}</h3>
+                        <span class="shrink-0 rounded-full border border-cyan/30 bg-cyan/10 px-2 py-0.5 text-xs text-cyan">${esc(d.company_type)}</span>
+                    </div>
+                    <p class="mt-2 text-sm text-slate-300">${[d.city, d.province].filter(Boolean).map(esc).join(', ')}</p>
+                    ${d.phone ? `<p class="mt-1 text-sm text-slate-300"><a href="tel:${esc(d.phone)}" class="hover:text-cyan transition">${esc(d.phone)}</a></p>` : ''}
+                    ${d.email ? `<p class="mt-1 text-sm text-slate-400 truncate"><a href="mailto:${esc(d.email)}" class="hover:text-cyan transition">${esc(d.email)}</a></p>` : ''}
+                    ${d.services_offered ? `<p class="mt-3 text-xs leading-5 text-slate-500">${esc(d.services_offered)}</p>` : ''}
+                </article>
+            `).join('') + '</div>';
+    }
+
+    /* ---- render marcadores ---- */
+    const markerIcon = L.divIcon({
+        className: '',
+        html: '<div style="width:10px;height:10px;background:#22d3ee;border:2px solid #0f172a;border-radius:50%;box-shadow:0 0 6px rgba(34,211,238,.7)"></div>',
+        iconSize: [10, 10], iconAnchor: [5, 5], popupAnchor: [0, -8]
+    });
+
+    function renderMapMarkers(list) {
+        markersGroup.clearLayers();
+        const bounds = [];
+        list.forEach(d => {
+            if (d.latitude == null || d.longitude == null) return;
+            L.marker([parseFloat(d.latitude), parseFloat(d.longitude)], { icon: markerIcon })
+                .bindPopup(
+                    `<b>${esc(d.company_name)}</b><br>${esc(d.city)}, ${esc(d.province)}<br>` +
+                    (d.phone ? `<a href="tel:${esc(d.phone)}">${esc(d.phone)}</a><br>` : '') +
+                    (d.email ? `<a href="mailto:${esc(d.email)}">${esc(d.email)}</a>` : '')
+                )
+                .addTo(markersGroup);
+            bounds.push([parseFloat(d.latitude), parseFloat(d.longitude)]);
+        });
+        if (!modalMap) return;
+        if (bounds.length > 1) modalMap.fitBounds(bounds, { padding: [30, 30], maxZoom: 12 });
+        else if (bounds.length === 1) modalMap.setView(bounds[0], 12);
+    }
+
+    function esc(s) {
+        return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') window.closeInstallerModal(); });
+})();
+</script>

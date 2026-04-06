@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Invoices{% endblock %}
+
+{% block content %}
+<section class="mx-auto grid max-w-7xl gap-8 px-6 py-16 lg:grid-cols-[280px_1fr]">
+    {% include 'components/portal_nav.html' %}
+    <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl">
+        <h1 class="text-4xl font-semibold text-white">Invoices</h1>
+        <div class="mt-8 space-y-4">
+            {% for invoice in invoices %}
+                <div class="rounded-3xl border border-white/10 p-5">
+                    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                        <div>
+                            <p class="text-lg font-semibold text-white">{{ invoice.invoice_number }}</p>
+                            <p class="mt-2 text-sm text-slate-400">Order #{{ invoice.order.pk }} | Due {{ invoice.due_date }}</p>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <p class="text-lg font-semibold text-white">{{ invoice.amount }} EUR</p>
+                            <a href="{% url 'invoices:pdf' invoice.pk %}" class="rounded-full border border-white/10 px-4 py-2 text-sm text-white">Download PDF</a>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+                <p class="text-slate-400">No invoices available yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

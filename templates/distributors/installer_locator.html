@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block title %}Red de distribuidores · MHD Platform{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<style>
+  #dist-map { height: 420px; border-radius: 1.5rem; background: #0f172a; }
+  .leaflet-popup-content-wrapper { background: #1e293b; color: #e2e8f0; border: 1px solid rgba(255,255,255,0.1); border-radius: 1rem; box-shadow: 0 4px 24px rgba(0,0,0,0.5); }
+  .leaflet-popup-tip { background: #1e293b; }
+  .leaflet-popup-content { margin: 12px 14px; font-family: 'Space Grotesk', sans-serif; font-size: 13px; line-height: 1.6; }
+  .leaflet-popup-content b { color: #22d3ee; }
+  .leaflet-popup-content a { color: #94a3b8; text-decoration: none; }
+  .leaflet-popup-content a:hover { color: #22d3ee; }
+  .leaflet-control-zoom a { background: #1e293b !important; color: #e2e8f0 !important; border-color: rgba(255,255,255,0.1) !important; }
+  .leaflet-control-zoom a:hover { background: #334155 !important; }
+  .leaflet-control-attribution { background: rgba(15,23,42,0.8) !important; color: #475569 !important; }
+  .leaflet-control-attribution a { color: #475569 !important; }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="mx-auto max-w-7xl px-6 py-16 space-y-8">
+
+  {# — Cabecera + filtros — #}
+  <div class="rounded-[2rem] border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+    <p class="text-xs uppercase tracking-[0.3em] text-cyan">Red de distribuidores</p>
+    <h1 class="mt-1 text-3xl font-semibold text-white">Buscar distribuidor</h1>
+    <div class="mt-5 grid gap-3 sm:grid-cols-3">
+      <input id="f-name" type="text" autocomplete="off" placeholder="Nombre…"
+        class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+      <input id="f-province" type="text" autocomplete="off" placeholder="Provincia…"
+        class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+      <input id="f-city" type="text" autocomplete="off" placeholder="Ciudad…"
+        class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+    </div>
+    <div class="mt-3 flex flex-wrap items-center gap-3">
+      <div class="relative min-w-[160px] flex-1 max-w-xs">
+        <input id="f-postal" type="text" maxlength="5" autocomplete="off" placeholder="Código postal (ej. 08001)…"
+          class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+      </div>
+      <div class="flex items-center gap-2">
+        <label for="f-radius" class="text-sm text-slate-400 whitespace-nowrap">Radio:</label>
+        <div class="relative">
+          <input id="f-radius" type="number" min="1" max="999" value="100"
+            class="w-24 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none pr-10 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none">
+          <span class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400">km</span>
+        </div>
+      </div>
+      <button id="btn-postal" class="rounded-2xl bg-cyan px-5 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">
+        Buscar por cercanía
+      </button>
+      <button id="btn-clear-postal" class="hidden rounded-2xl border border-white/15 px-4 py-3 text-sm text-slate-300 transition hover:border-cyan/40 hover:text-white">
+        Quitar orden
+      </button>
+    </div>
+    <p id="postal-status" class="mt-1 text-xs text-slate-500 hidden"></p>
+    <p id="loc-count" class="mt-2 text-xs text-slate-500">Cargando…</p>
+  </div>
+
+  {# — Mapa — #}
+  <div class="rounded-[2rem] border border-white/10 overflow-hidden">
+    <div id="dist-map"></div>
+  </div>
+
+  {# — Grid de tarjetas — #}
+  <div id="loc-grid" class="grid gap-5 md:grid-cols-2 xl:grid-cols-3"></div>
+  <p id="loc-no-match" class="hidden text-center text-sm text-slate-400 py-8">Ningún distribuidor coincide con los filtros.</p>
+
+</section>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+(function () {
+  /* ---- mapa ---- */
+  const map = L.map('dist-map', { zoomControl: true }).setView([40.4, -3.7], 6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '© <a href="https://www.openstreetmap.org/copyright">OSM</a> © <a href="https://carto.com/">CARTO</a>',
+    subdomains: 'abcd', maxZoom: 19
+  }).addTo(map);
+
+  const markerIcon = L.divIcon({
+    className: '',
+    html: '<div style="width:10px;height:10px;background:#22d3ee;border:2px solid #0f172a;border-radius:50%;box-shadow:0 0 6px rgba(34,211,238,0.7)"></div>',
+    iconSize: [10, 10], iconAnchor: [5, 5], popupAnchor: [0, -8]
+  });
+
+  let markersGroup = L.layerGroup().addTo(map);
+  let allDist  = [];
+  let userLat  = null;
+  let userLon  = null;
+  let searchCircle = null;
+
+  const countEl      = document.getElementById('loc-count');
+  const grid         = document.getElementById('loc-grid');
+  const noMatch      = document.getElementById('loc-no-match');
+  const postalStatus = document.getElementById('postal-status');
+  const btnPostal    = document.getElementById('btn-postal');
+  const btnClear     = document.getElementById('btn-clear-postal');
+
+  function esc(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  /* Haversine distance in km between two lat/lon pairs */
+  function haversine(lat1, lon1, lat2, lon2) {
+    const R = 6371;
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLon/2) * Math.sin(dLon/2);
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  function render(list) {
+    markersGroup.clearLayers();
+    if (searchCircle) { map.removeLayer(searchCircle); searchCircle = null; }
+    const bounds = [];
+
+    countEl.textContent = list.length + ' distribuidor' + (list.length !== 1 ? 'es' : '');
+    noMatch.classList.toggle('hidden', list.length > 0);
+
+    grid.innerHTML = list.map(d => {
+      const distBadge = (userLat !== null && d._km !== undefined)
+        ? `<span class="shrink-0 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-xs text-emerald-400">${d._km} km</span>`
+        : '';
+      return `
+      <article class="rounded-[2rem] border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
+        <div class="flex items-start justify-between gap-2">
+          <h2 class="text-base font-semibold text-white leading-tight">${esc(d.company_name)}</h2>
+          <div class="flex shrink-0 flex-wrap gap-1">
+            ${distBadge}
+            <span class="rounded-full border border-cyan/30 bg-cyan/10 px-2 py-0.5 text-xs text-cyan">${esc(d.company_type)}</span>
+          </div>
+        </div>
+        <p class="mt-2 text-sm text-slate-300">${[d.city, d.province].filter(Boolean).map(esc).join(', ')}</p>
+        ${d.phone ? `<p class="mt-1 text-sm text-slate-300"><a href="tel:${esc(d.phone)}" class="hover:text-cyan transition">${esc(d.phone)}</a></p>` : ''}
+        ${d.email ? `<p class="mt-1 text-sm text-slate-400 truncate"><a href="mailto:${esc(d.email)}" class="hover:text-cyan transition">${esc(d.email)}</a></p>` : ''}
+        ${d.services_offered ? `<p class="mt-3 text-xs leading-5 text-slate-500">${esc(d.services_offered)}</p>` : ''}
+      </article>`;
+    }).join('');
+
+    list.forEach(d => {
+      if (d.latitude === null || d.longitude === null) return;
+      L.marker([parseFloat(d.latitude), parseFloat(d.longitude)], { icon: markerIcon })
+        .bindPopup(
+          `<b>${esc(d.company_name)}</b><br>${esc(d.city)}, ${esc(d.province)}<br>` +
+          (d.phone ? `<a href="tel:${esc(d.phone)}">${esc(d.phone)}</a><br>` : '') +
+          (d.email ? `<a href="mailto:${esc(d.email)}">${esc(d.email)}</a>` : '')
+        )
+        .addTo(markersGroup);
+      bounds.push([parseFloat(d.latitude), parseFloat(d.longitude)]);
+    });
+
+    if (userLat !== null) {
+      const radiusKm = Math.max(1, parseInt(document.getElementById('f-radius').value, 10) || 100);
+      /* draw a subtle circle around the search point */
+      searchCircle = L.circle([userLat, userLon], {
+        radius: radiusKm * 1000, color: '#22d3ee', weight: 1,
+        fillColor: '#22d3ee', fillOpacity: 0.05
+      }).addTo(map);
+      if (bounds.length >= 1) {
+        map.fitBounds([[userLat, userLon], ...bounds], { padding: [40, 40], maxZoom: 11 });
+      } else {
+        map.setView([userLat, userLon], 9);
+      }
+    } else if (bounds.length > 1) {
+      map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
+    } else if (bounds.length === 1) {
+      map.setView(bounds[0], 12);
+    }
+  }
+
+  function computeDistances(list) {
+    return list.map(d => {
+      if (userLat === null || d.latitude === null || d.longitude === null) {
+        return Object.assign({}, d, { _km: undefined });
+      }
+      const km = haversine(userLat, userLon, parseFloat(d.latitude), parseFloat(d.longitude));
+      return Object.assign({}, d, { _km: Math.round(km) });
+    });
+  }
+
+  function filter() {
+    const name = document.getElementById('f-name').value.toLowerCase();
+    const prov = document.getElementById('f-province').value.toLowerCase();
+    const city = document.getElementById('f-city').value.toLowerCase();
+    const radiusKm = Math.max(1, parseInt(document.getElementById('f-radius').value, 10) || 100);
+    let filtered = allDist.filter(d =>
+      (!name || d.company_name.toLowerCase().includes(name)) &&
+      (!prov  || d.province.toLowerCase().includes(prov)) &&
+      (!city  || d.city.toLowerCase().includes(city))
+    );
+    if (userLat !== null) {
+      filtered = computeDistances(filtered)
+        .filter(d => d._km === undefined || d._km <= radiusKm)
+        .sort((a, b) => {
+          if (a._km === undefined) return 1;
+          if (b._km === undefined) return -1;
+          return a._km - b._km;
+        });
+    }
+    render(filtered);
+  }
+
+  ['f-name','f-province','f-city'].forEach(id =>
+    document.getElementById(id).addEventListener('input', filter)
+  );
+
+  document.getElementById('f-radius').addEventListener('change', () => { if (userLat !== null) filter(); });
+
+  /* ---- Búsqueda por código postal (Nominatim) ---- */
+  function setPostalStatus(msg, isError) {
+    postalStatus.textContent = msg;
+    postalStatus.className = 'mt-1 text-xs ' + (isError ? 'text-red-400' : 'text-slate-400');
+    postalStatus.classList.remove('hidden');
+  }
+
+  function geocodePostal(cp) {
+    btnPostal.disabled = true;
+    btnPostal.textContent = 'Buscando…';
+    setPostalStatus('Geocodificando código postal…', false);
+    const url = `https://nominatim.openstreetmap.org/search?postalcode=${encodeURIComponent(cp)}&country=es&format=json&limit=1`;
+    fetch(url, { headers: { 'Accept-Language': 'es', 'User-Agent': 'MHDPlatform/1.0' } })
+      .then(r => r.json())
+      .then(results => {
+        btnPostal.disabled = false;
+        btnPostal.textContent = 'Buscar por cercanía';
+        if (!results || results.length === 0) {
+          setPostalStatus('Código postal no encontrado. Comprueba que es válido (España).', true);
+          return;
+        }
+        userLat = parseFloat(results[0].lat);
+        userLon = parseFloat(results[0].lon);
+        const radiusKm = Math.max(1, parseInt(document.getElementById('f-radius').value, 10) || 100);
+        setPostalStatus(`Mostrando distribuidores a menos de ${radiusKm} km del CP ${cp}, ordenados por distancia.`, false);
+        btnClear.classList.remove('hidden');
+        filter();
+      })
+      .catch(() => {
+        btnPostal.disabled = false;
+        btnPostal.textContent = 'Buscar por cercanía';
+        setPostalStatus('Error al geocodificar. Comprueba tu conexión.', true);
+      });
+  }
+
+  btnPostal.addEventListener('click', () => {
+    const cp = document.getElementById('f-postal').value.trim();
+    if (!/^\d{5}$/.test(cp)) {
+      setPostalStatus('Introduce un código postal español válido de 5 dígitos.', true);
+      return;
+    }
+    geocodePostal(cp);
+  });
+
+  document.getElementById('f-postal').addEventListener('keydown', e => {
+    if (e.key === 'Enter') btnPostal.click();
+  });
+
+  btnClear.addEventListener('click', () => {
+    userLat = null;
+    userLon = null;
+    document.getElementById('f-postal').value = '';
+    postalStatus.classList.add('hidden');
+    btnClear.classList.add('hidden');
+    filter();
+  });
+
+  /* ---- cargar datos via fetch ---- */
+  fetch('{% url "distributors:search_json" %}')
+    .then(r => r.json())
+    .then(data => {
+      allDist = data;
+      render(allDist);
+    })
+    .catch(() => {
+      countEl.textContent = 'Error al cargar distribuidores.';
+    });
+
+})();
+</script>
+{% endblock %}

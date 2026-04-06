@@ -1,0 +1,90 @@
+# =========================
+# 🐍 Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# =========================
+# 🗄️ Base de datos
+# =========================
+db.sqlite3
+db.sqlite3-journal
+
+# =========================
+# 🔐 Archivos sensibles
+# =========================
+.env
+*.env
+.env.*
+
+# =========================
+# 📦 Archivos estáticos y media
+# =========================
+/staticfiles/
+/media/
+
+# =========================
+# 🛠️ Archivos de desarrollo
+# =========================
+*.log
+*.pot
+*.pyc
+*.pyo
+
+# =========================
+# 🧪 Test y cobertura
+# =========================
+htmlcov/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# =========================
+# 🧾 Migraciones (opcional)
+# =========================
+**/migrations/*
+!**/migrations/__init__.py
+
+# =========================
+# 🧠 IDEs / Editores
+# =========================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =========================
+# 🐳 Docker (si usas)
+# =========================
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+# ⚙️ Archivos del sistema
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# 🧱 Archivos compilados
+# =========================
+*.so
+
+# =========================
+# 📁 Archivos temporales
+# =========================
+tmp/
+temp/
