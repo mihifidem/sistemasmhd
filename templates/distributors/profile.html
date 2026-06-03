@@ -144,6 +144,7 @@
                             class="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none resize-none">{{ form.bio.value|default:'' }}</textarea>
                         <p id="bio-ai-status" class="mt-1 text-xs text-slate-500 hidden"></p>
                     </div>
+
                 </div>
 
                 <div class="flex justify-end">
@@ -154,6 +155,53 @@
                 </div>
             </form>
         </div>
+
+          <!-- Formulario independiente: acceso técnicos -->
+          <div class="rounded-[2rem] border border-cyan/20 bg-cyan/5 p-8 backdrop-blur-xl">
+            <p class="text-xs uppercase tracking-[0.28em] text-cyan">Panel técnicos</p>
+            <h2 class="mt-2 text-xl font-semibold text-white">Credenciales compartidas para empleados técnicos</h2>
+            <p class="mt-1 text-sm text-slate-400">Este guardado es independiente del resto del perfil para evitar que se pierda por validaciones de otros campos.</p>
+
+            <form method="post" action="{% url 'distributors:edit_technician_access' %}" class="mt-6 grid gap-5 md:grid-cols-2">
+              {% csrf_token %}
+
+              <div>
+                <label class="block text-sm text-slate-300 mb-1.5">Usuario técnicos</label>
+                <input type="text" name="technician_portal_username" value="{{ technician_form.technician_portal_username.value|default:'' }}"
+                  placeholder="ej. tecnicos-acme"
+                  class="w-full rounded-2xl border {% if technician_form.technician_portal_username.errors %}border-red-400{% else %}border-white/10{% endif %} bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+                {% for e in technician_form.technician_portal_username.errors %}<p class="mt-1 text-xs text-red-400">{{ e }}</p>{% endfor %}
+              </div>
+
+              <div class="rounded-2xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
+                <p class="font-medium text-white">URL de acceso técnico</p>
+                <p class="mt-2 break-all text-cyan">{{ request.scheme }}://{{ request.get_host }}{% url 'distributors:technician_login' %}</p>
+              </div>
+
+              <div>
+                <label class="block text-sm text-slate-300 mb-1.5">Contraseña técnicos</label>
+                <input type="password" name="technician_portal_password" value=""
+                  placeholder="Nueva contraseña (mín. 6 caracteres)"
+                  class="w-full rounded-2xl border {% if technician_form.technician_portal_password.errors %}border-red-400{% else %}border-white/10{% endif %} bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+                {% for e in technician_form.technician_portal_password.errors %}<p class="mt-1 text-xs text-red-400">{{ e }}</p>{% endfor %}
+              </div>
+
+              <div>
+                <label class="block text-sm text-slate-300 mb-1.5">Confirmar contraseña técnicos</label>
+                <input type="password" name="technician_portal_password_confirm" value=""
+                  placeholder="Repite la contraseña"
+                  class="w-full rounded-2xl border {% if technician_form.technician_portal_password_confirm.errors %}border-red-400{% else %}border-white/10{% endif %} bg-white/5 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-cyan focus:outline-none">
+                {% for e in technician_form.technician_portal_password_confirm.errors %}<p class="mt-1 text-xs text-red-400">{{ e }}</p>{% endfor %}
+              </div>
+
+              <div class="md:col-span-2 flex justify-end">
+                <button type="submit"
+                  class="rounded-full bg-cyan px-8 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">
+                  Guardar acceso técnicos
+                </button>
+              </div>
+            </form>
+          </div>
     </div>
 </section>
 {% endblock %}

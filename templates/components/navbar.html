@@ -7,11 +7,26 @@
         <div class="hidden items-center gap-8 text-sm text-slate-300 md:flex">
             <a href="{% url 'core:home' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Inicio{% else %}Home{% endif %}</a>
             <a href="{% url 'core:how_it_works' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Tecnologia{% else %}Technology{% endif %}</a>
-            <a href="{% url 'products:catalog' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Productos{% else %}Products{% endif %}</a>
             <a href="{% url 'distributors:installer_locator' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Instaladores{% else %}Installers{% endif %}</a>
-            <a href="{% url 'blog:list' %}" class="transition hover:text-cyan">Blog</a>
-            <a href="{% url 'products:resources' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Recursos{% else %}Resources{% endif %}</a>
+            <div id="blog-nav-dropdown" class="relative">
+                <a id="blog-nav-toggle" href="{% url 'blog:list' %}" class="inline-flex items-center gap-1 transition hover:text-cyan" aria-haspopup="true" aria-expanded="false">
+                    Blog
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 transition" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.94a.75.75 0 1 1 1.08 1.04l-4.25 4.5a.75.75 0 0 1-1.08 0l-4.25-4.5a.75.75 0 0 1 .02-1.06Z" clip-rule="evenodd" />
+                    </svg>
+                </a>
+                <div id="blog-nav-menu" class="pointer-events-none invisible absolute left-0 top-full z-50 mt-3 w-64 max-h-0 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/95 p-0 opacity-0 shadow-2xl backdrop-blur-xl transition-all duration-300 ease-out">
+                    <a href="{% url 'blog:list' %}" class="block rounded-xl px-3 py-2 text-sm text-slate-200 transition hover:bg-white/10 hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Todos los artículos{% else %}All articles{% endif %}</a>
+                    {% for category in blog_nav_categories %}
+                    <a href="{% url 'blog:list' %}?category={{ category.slug }}" class="mt-1 block rounded-xl px-3 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-cyan">{{ category.name }}</a>
+                    {% empty %}
+                    <span class="mt-1 block rounded-xl px-3 py-2 text-sm text-slate-500">{% if request.LANGUAGE_CODE == 'es' %}Sin categorías{% else %}No categories{% endif %}</span>
+                    {% endfor %}
+                </div>
+            </div>
             <a href="{% url 'support:faq' %}" class="transition hover:text-cyan">FAQ</a>
+            
+            <a href="{% url 'products:catalog' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Acceso distribuidor{% else %}Distributor access{% endif %}</a>
         </div>
         <div class="flex items-center gap-3">
             <!-- Toggle dark/light -->
@@ -37,9 +52,92 @@
                     <button type="submit" class="rounded-full bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:-translate-y-0.5">{% if request.LANGUAGE_CODE == 'es' %}Salir{% else %}Logout{% endif %}</button>
                 </form>
             {% else %}
-                <a href="{% url 'login' %}" class="rounded-full border border-white/15 px-4 py-2 text-sm text-slate-100 transition hover:border-cyan/60 hover:bg-white/5">{% if request.LANGUAGE_CODE == 'es' %}Iniciar sesion{% else %}Login{% endif %}</a>
+                <a href="{% url 'distributors:technician_login' %}"
+                   aria-label="{% if request.LANGUAGE_CODE == 'es' %}Acceso técnicos{% else %}Technician access{% endif %}"
+                   title="{% if request.LANGUAGE_CODE == 'es' %}Acceso técnicos{% else %}Technician access{% endif %}"
+                   class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/15 text-slate-100 transition hover:border-cyan/60 hover:bg-white/5 hover:text-cyan">
+                    <span class="text-[10px] font-bold leading-none">T</span>
+                    <span class="sr-only">{% if request.LANGUAGE_CODE == 'es' %}Acceso técnicos{% else %}Technician access{% endif %}</span>
+                </a>
                 <a href="{% url 'distributors:register' %}" class="rounded-full bg-cyan px-4 py-2 text-sm font-medium text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">{% if request.LANGUAGE_CODE == 'es' %}Quiero ser distribuidor{% else %}Become a distributor{% endif %}</a>
             {% endif %}
         </div>
     </nav>
 </header>
+
+<script>
+(function () {
+    const dropdown = document.getElementById('blog-nav-dropdown');
+    const toggle = document.getElementById('blog-nav-toggle');
+    const menu = document.getElementById('blog-nav-menu');
+    if (!dropdown || !toggle || !menu) {
+        return;
+    }
+
+    let closeTimer = null;
+    const AUTO_CLOSE_MS = 3500;
+
+    function clearCloseTimer() {
+        if (closeTimer) {
+            window.clearTimeout(closeTimer);
+            closeTimer = null;
+        }
+    }
+
+    function scheduleClose() {
+        clearCloseTimer();
+        closeTimer = window.setTimeout(closeMenu, AUTO_CLOSE_MS);
+    }
+
+    function openMenu() {
+        menu.classList.remove('invisible', 'pointer-events-none', 'max-h-0', 'opacity-0', 'p-0');
+        menu.classList.add('visible', 'pointer-events-auto', 'max-h-96', 'opacity-100', 'p-2');
+        toggle.setAttribute('aria-expanded', 'true');
+        scheduleClose();
+    }
+
+    function closeMenu() {
+        clearCloseTimer();
+        menu.classList.remove('visible', 'pointer-events-auto', 'max-h-96', 'opacity-100', 'p-2');
+        menu.classList.add('invisible', 'pointer-events-none', 'max-h-0', 'opacity-0', 'p-0');
+        toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    function isOpen() {
+        return toggle.getAttribute('aria-expanded') === 'true';
+    }
+
+    toggle.addEventListener('click', function (event) {
+        event.preventDefault();
+        if (isOpen()) {
+            closeMenu();
+            return;
+        }
+        openMenu();
+    });
+
+    menu.querySelectorAll('a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            closeMenu();
+        });
+    });
+
+    dropdown.addEventListener('mouseenter', function () {
+        if (isOpen()) {
+            scheduleClose();
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        if (!dropdown.contains(event.target)) {
+            closeMenu();
+        }
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+            closeMenu();
+        }
+    });
+})();
+</script>

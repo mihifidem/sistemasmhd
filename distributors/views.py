@@ -8,9 +8,30 @@ from invoices.models import Invoice
 from orders.models import Order
 from products.models import Resource
 
-from .decorators import approved_distributor_required
-from .forms import DistributorProfileForm, DistributorRegistrationForm
+from .decorators import approved_distributor_required, technician_portal_required
+from .forms import DistributorProfileForm, DistributorRegistrationForm, TechnicianPortalAccessForm
 from .models import Distributor
+
+
+def _build_grouped_private_resources():
+    resource_types = [
+        ('video', 'Vídeos'),
+        ('audio', 'Podcasts'),
+        ('pdf', 'PDFs'),
+        ('infographic', 'Infografías'),
+        ('link', 'Presentaciones y enlaces'),
+    ]
+    private_resources = Resource.objects.filter(active=True, is_public=False).select_related('product').order_by('order', '-created_at')
+    grouped_resources = []
+    for resource_type, label in resource_types:
+        items = [resource for resource in private_resources if resource.resource_type == resource_type]
+        grouped_resources.append({
+            'type': resource_type,
+            'label': label,
+            'items': items,
+            'has_items': bool(items),
+        })
+    return grouped_resources
 
 
 def register(request):
@@ -50,10 +71,60 @@ def dashboard(request):
 
 
 @approved_distributor_required
+def resources(request):
+    return render(request, 'distributors/resources.html', {
+        'grouped_resources': _build_grouped_private_resources(),
+    })
+
+
+def technician_login(request):
+    if request.session.get('technician_distributor_id'):
+        return redirect('distributors:technician_resources')
+
+    error = ''
+    if request.method == 'POST':
+        username = (request.POST.get('username') or '').strip().lower()
+        password = request.POST.get('password') or ''
+
+        distributor = Distributor.objects.filter(
+            technician_portal_username__iexact=username,
+            status=Distributor.Status.APPROVED,
+        ).first()
+
+        if distributor and distributor.check_technician_password(password):
+            request.session['technician_distributor_id'] = distributor.pk
+            request.session['technician_distributor_name'] = distributor.company_name
+            return redirect('distributors:technician_resources')
+
+        error = 'Usuario o contraseña incorrectos.'
+
+    return render(request, 'distributors/technician_login.html', {'error': error})
+
+
+@technician_portal_required
+def technician_resources(request):
+    return render(request, 'distributors/technician_resources.html', {
+        'distributor': request.technician_distributor,
+        'grouped_resources': _build_grouped_private_resources(),
+    })
+
+
+def technician_logout(request):
+    request.session.pop('technician_distributor_id', None)
+    request.session.pop('technician_distributor_name', None)
+    return redirect('distributors:technician_login')
+
+
+@approved_distributor_required
 def profile(request):
     distributor = request.user.distributor_profile
     form = DistributorProfileForm(instance=distributor)
-    return render(request, 'distributors/profile.html', {'distributor': distributor, 'form': form})
+    technician_form = TechnicianPortalAccessForm(instance=distributor)
+    return render(request, 'distributors/profile.html', {
+        'distributor': distributor,
+        'form': form,
+        'technician_form': technician_form,
+    })
 
 
 @approved_distributor_required
@@ -67,7 +138,32 @@ def edit_profile(request):
             return redirect('distributors:profile')
     else:
         form = DistributorProfileForm(instance=distributor)
-    return render(request, 'distributors/profile.html', {'distributor': distributor, 'form': form})
+    technician_form = TechnicianPortalAccessForm(instance=distributor)
+    return render(request, 'distributors/profile.html', {
+        'distributor': distributor,
+        'form': form,
+        'technician_form': technician_form,
+    })
+
+
+@approved_distributor_required
+def edit_technician_access(request):
+    distributor = request.user.distributor_profile
+    if request.method != 'POST':
+        return redirect('distributors:profile')
+
+    technician_form = TechnicianPortalAccessForm(request.POST, instance=distributor)
+    if technician_form.is_valid():
+        technician_form.save()
+        messages.success(request, 'Credenciales del panel técnico actualizadas correctamente.')
+        return redirect('distributors:profile')
+
+    form = DistributorProfileForm(instance=distributor)
+    return render(request, 'distributors/profile.html', {
+        'distributor': distributor,
+        'form': form,
+        'technician_form': technician_form,
+    })
 
 
 @approved_distributor_required
@@ -178,7 +274,7 @@ def distributor_map(request):
         latitude__isnull=False,
         longitude__isnull=False,
     )
-    m = folium.Map(location=[40.4168, -3.7038], zoom_start=6, tiles='CartoDB dark_matter')
+    m = folium.Map(location=[40.4168, -3.7038], zoom_start=6, tiles='CartoDB positron')
     for d in qs:
         folium.Marker(
             location=[float(d.latitude), float(d.longitude)],

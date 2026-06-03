@@ -33,16 +33,21 @@
         {% for post in posts %}
         <article class="blog-card rounded-[2rem] border border-white/10 bg-white/5 p-8 backdrop-blur-xl"
             data-title="{{ post.title|lower }}"
-            data-desc="{{ post.meta_description|default:post.content|truncatechars:200|lower }}"
+            data-desc="{{ post.meta_description|default:post.content|striptags|truncatechars:200|lower }}"
             data-distrib="{{ post.distributors_only|yesno:'true,false' }}">
             <div class="flex items-center justify-between gap-2">
                 <p class="text-sm text-slate-400">{{ post.publish_date|date:'d M Y' }}</p>
-                {% if post.distributors_only %}
-                <span class="rounded-full bg-cyan/15 px-2 py-0.5 text-xs font-medium text-cyan">Solo distribuidores</span>
-                {% endif %}
+                <div class="flex items-center gap-2">
+                    {% if post.category %}
+                    <span class="rounded-full bg-white/10 px-2 py-0.5 text-xs font-medium text-slate-200">{{ post.category.name }}</span>
+                    {% endif %}
+                    {% if post.distributors_only %}
+                    <span class="rounded-full bg-cyan/15 px-2 py-0.5 text-xs font-medium text-cyan">Solo distribuidores</span>
+                    {% endif %}
+                </div>
             </div>
             <h2 class="mt-4 text-2xl font-semibold text-white blog-title">{{ post.title }}</h2>
-            <p class="mt-4 text-sm leading-6 text-slate-300">{{ post.meta_description|default:post.content|truncatechars:150 }}</p>
+            <p class="mt-4 text-sm leading-6 text-slate-300">{{ post.meta_description|default:post.content|striptags|truncatechars:150 }}</p>
             <a href="{{ post.get_absolute_url }}" class="mt-6 inline-block text-sm font-semibold text-cyan hover:opacity-80 transition">Leer artículo →</a>
         </article>
         {% empty %}

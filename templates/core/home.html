@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}{% if request.LANGUAGE_CODE == 'es' %}MHD Platform | Soluciones magnetohidrodinamicas{% else %}MHD
 Platform | Magnetohydrodynamic Solutions{% endif %}{% endblock %}
@@ -59,24 +60,14 @@ Platform | Magnetohydrodynamic Solutions{% endif %}{% endblock %}
 {% include 'components/benefits_grid.html' %}
 
 <section class="mx-auto max-w-7xl px-6 py-12">
-    <div class="grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+    <div class="grid gap-10">
         <div>
             <p class="text-sm uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Tecnologia{% else %}Technology{% endif %}</p>
-            <h2 class="mt-4 text-4xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Que significa la
-                magnetohidrodinamica en terminos practicos para calderas.{% else %}What magnetohydrodynamics means in
+            <h2 class="mt-4 text-4xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}¿Cómo funciona la magnetohidrodinámica en el agua?{% else %}What magnetohydrodynamics means in
                 practical boiler terms.{% endif %}</h2>
-        </div>
-        <div
-            class="rounded-[2rem] border border-white/10 bg-gradient-to-br from-white/10 to-cyan/10 p-8 backdrop-blur-xl">
-            <p class="text-base leading-8 text-slate-200">{% if request.LANGUAGE_CODE == 'es' %}La magnetohidrodinamica
-                estudia como interactuan los campos magneticos con fluidos conductores y particulas cargadas en
-                movimiento. En aplicaciones para calderas, los dispositivos MHD se disenan para influir en las
-                condiciones dinamicas del agua y la combustion, reduciendo el impacto de la cal y mejorando la
-                consistencia operativa sin consumibles adicionales.{% else %}Magnetohydrodynamics studies how magnetic
-                fields interact with conductive fluids and charged particles in motion. In boiler-related applications,
-                MHD devices are engineered to influence the dynamic conditions around water minerals and combustion
-                streams, aiming to reduce scaling impact and improve operational consistency without adding
-                consumables.{% endif %}</p>
+            <figure class="mt-6">
+                <img src="{% static 'img/mhdaguaciencia.png' %}" alt="Tuberia obstruida por cal" class="w-full h-auto">
+            </figure>
         </div>
     </div>
 </section>

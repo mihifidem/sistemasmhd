@@ -1,75 +1,69 @@
 {% load static %}
-<section class="mx-auto max-w-7xl px-6 pb-16 pt-16 lg:pt-24">
-    <div class="grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+<section class="hero-home relative mx-auto max-w-7xl px-6 pb-16 pt-16 lg:pt-24">
+    <div class="hero-home-grid absolute inset-x-6 top-20 -z-10 h-[32rem] rounded-[2.5rem]"></div>
+    <div class="hero-home-glow absolute -left-20 top-24 -z-10 h-56 w-56 rounded-full"></div>
+    <div class="hero-home-glow hero-home-glow-alt absolute -right-16 top-40 -z-10 h-72 w-72 rounded-full"></div>
+
+    <div class="grid items-start gap-10 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
-            <p class="text-sm font-medium uppercase tracking-[0.35em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}PROTECCION Y AHORRO PARA CALDERAS{% else %}Boiler protection for modern infrastructure{% endif %}</p>
-            <h1 class="mt-6 max-w-4xl text-5xl font-semibold leading-tight text-white md:text-5xl">{% if request.LANGUAGE_CODE == 'es' %}Protege tu caldera. Reduce la cal. Mejora la combustion.{% else %}Protect your boiler. Reduce limescale. Improve combustion.{% endif %}</h1>
-            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}La tecnologia MHD usa campos magneticos controlados para influir en el comportamiento de fluidos y gases en circulacion, ayudando a reducir la adherencia de cal y favoreciendo una combustion más limpia en equipos térmicos.{% else %}MHD technology uses controlled magnetic fields to influence fluid and gas behavior in circulation systems, helping reduce limescale adhesion and supporting cleaner combustion performance in heating equipment.{% endif %}</p>
+            <div class="inline-flex items-center gap-3 rounded-full border border-cyan/35 bg-cyan/10 px-4 py-2">
+                <span class="hero-home-dot h-2.5 w-2.5 rounded-full bg-cyan"></span>
+                <p class="text-xs font-semibold uppercase tracking-[0.28em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Proteccion inteligente de calderas{% else %}Intelligent boiler protection{% endif %}</p>
+            </div>
+
+            <h1 class="mt-7 max-w-3xl text-5xl font-semibold leading-[1.05] text-white md:text-6xl">{% if request.LANGUAGE_CODE == 'es' %}Menos cal, mejor combustion y mayor vida util de tu caldera{% else %}Less scale, better combustion, longer system lifetime{% endif %}</h1>
+
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}MHD mejora el rendimiento de los circuitos de agua y gas mediante la aplicación de campos magnéticos controlados que optimizan las propiedades de los fluidos. Esto se traduce en una menor formación de incrustaciones, una transferencia térmica más eficiente, menores necesidades de mantenimiento y una mayor fiabilidad operativa, sin productos químicos ni interrupciones relevantes del servicio.{% else %}MHD applies controlled magnetic fields in water and gas circuits to stabilize operating conditions, reduce buildup, and keep heat transfer more efficient without chemicals or complex downtime.{% endif %}</p>
+
             <div class="mt-10 flex flex-col gap-4 sm:flex-row">
-                <a href="{% url 'core:how_it_works' %}" class="rounded-full bg-cyan px-6 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">{% if request.LANGUAGE_CODE == 'es' %}Ver como funciona{% else %}Learn how it works{% endif %}</a>
-                <button onclick="openInstallerModal()" class="rounded-full border border-white/15 px-6 py-3 text-sm font-semibold text-white transition hover:border-cyan hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Buscar instalador{% else %}Find installer{% endif %}</button>
+                <a href="{% url 'core:how_it_works' %}" class="rounded-full bg-cyan px-7 py-3.5 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">{% if request.LANGUAGE_CODE == 'es' %}Ver como funciona{% else %}See how it works{% endif %}</a>
+                <button onclick="openInstallerModal()" class="rounded-full border border-white/20 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white transition hover:border-cyan hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Buscar instalador{% else %}Find installer{% endif %}</button>
+            </div>
+
+            <div class="mt-10 grid gap-3 sm:grid-cols-3">
+                <article class="hero-stat rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p class="text-sm font-semibold leading-6 text-white">{% if request.LANGUAGE_CODE == 'es' %}<strong class="text-3xl font-bold leading-none"><span class="text-5xl align-middle">+</span><br><span class="text-3xl">ahorro</span></strong>{% else %}No electrical power required{% endif %}</p>
+                </article>
+                <article class="hero-stat rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p class="text-sm font-semibold leading-6 text-white">{% if request.LANGUAGE_CODE == 'es' %}<strong class="text-3xl font-bold leading-none"><span class="text-5xl align-middle">+</span> eficiencia</strong>{% else %}No consumables{% endif %}</p>
+                </article>
+                <article class="hero-stat rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p class="text-sm font-semibold leading-6 text-white">{% if request.LANGUAGE_CODE == 'es' %}<strong class="text-3xl font-bold leading-none"><span class="text-5xl align-middle">+</span> protección</strong>{% else %}Continuous operation{% endif %}</p>
+                </article>
             </div>
         </div>
-        <div class="rounded-[2rem] border border-white/10 bg-white/5 p-8 shadow-glow backdrop-blur-xl">
-            <div class="grid gap-4 sm:grid-cols-2">
-                <!-- MHD Agua Card -->
-                <div class="flip-card rounded-[2rem] border border-white/10">
-                    <div class="flip-card-inner">
-                        <!-- Front: Image -->
-                        <div class="flip-card-front rounded-[2rem] relative">
-                            <img src="{% static 'img/mhd_agua.jpg' %}" alt="MHD Agua" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                                <div>
-                                    <p class="text-xs uppercase tracking-[0.3em] text-cyan">Sistemas de agua</p>
-                                    <h3 class="mt-2 text-2xl font-semibold text-white">MHD Agua</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Back: Information -->
-                        <div class="flip-card-back">
-                            <div class="space-y-4">
-                                <div>
-                                    <p class="text-xs text-slate-400 mb-1">Descripción</p>
-                                    <p class="text-sm leading-5 text-slate-200">{% if request.LANGUAGE_CODE == 'es' %}Reduce la formacion de cal en superficies de caldera y tuberias.{% else %}Reduces limescale formation on boiler and pipe surfaces.{% endif %}</p>
-                                </div>
-                                <a href="{% url 'products:detail' 'mhd-agua2' %}" class="block rounded-full border border-cyan bg-cyan/10 px-4 py-2 text-sm text-cyan transition hover:bg-cyan/20 text-center w-fit mx-auto">Ver detalle</a>
-                            </div>
+
+        <div class="rounded-[2rem] border border-white/10 bg-slate-900/65 p-5 shadow-glow backdrop-blur-xl">
+            <div class="grid gap-4">
+                <article class="group overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/5">
+                    <div class="relative">
+                        <img src="{% static 'img/mhdagua7.png' %}" alt="MHD Agua" class="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.03]">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <p class="text-[11px] font-medium uppercase tracking-[0.28em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Circuitos de agua{% else %}Water circuits{% endif %}</p>
+                            <h3 class="mt-1 text-2xl font-semibold text-white">MHD Agua</h3>
                         </div>
                     </div>
-                </div>
-                <!-- MHD Gas Card -->
-                <div class="flip-card rounded-[2rem] border border-white/10">
-                    <div class="flip-card-inner">
-                        <!-- Front: Image -->
-                        <div class="flip-card-front rounded-[2rem] relative">
-                            <img src="{% static 'img/mhd_gas.jpg' %}" alt="MHD Gas" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                                <div>
-                                    <p class="text-xs uppercase tracking-[0.3em] text-cyan">Sistemas de gas</p>
-                                    <h3 class="mt-2 text-2xl font-semibold text-white">MHD Gas</h3>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Back: Information -->
-                        <div class="flip-card-back">
-                            <div class="space-y-4">
-                                <div>
-                                    <p class="text-xs text-slate-400 mb-1">Descripción</p>
-                                    <p class="text-sm leading-5 text-slate-200">{% if request.LANGUAGE_CODE == 'es' %}Favorece una mejor eficiencia de combustion en calderas de gas.{% else %}Supports improved combustion efficiency in gas boilers.{% endif %}</p>
-                                </div>
-                                <a href="{% url 'products:detail' 'mhd-gas2' %}" class="block rounded-full border border-cyan bg-cyan/10 px-4 py-2 text-sm text-cyan transition hover:bg-cyan/20 text-center w-fit mx-auto">Ver detalle</a>
-                            </div>
+                    <div class="p-5 pt-4">
+                        <p class="text-sm leading-6 text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}Ayuda a prevenir la formación de cal en los puntos más sensibles del sistema, mejorando la eficiencia energética y prolongando la vida útil de los equipos.{% else %}Designed to reduce scale formation in critical heat exchange and piping zones.{% endif %}</p>
+                        <a href="{% url 'products:detail' 'mhd-agua2' %}" class="mt-4 inline-flex items-center rounded-full border border-cyan/50 bg-cyan/10 px-4 py-2 text-sm font-medium text-cyan transition hover:bg-cyan/20">{% if request.LANGUAGE_CODE == 'es' %}Ver detalle{% else %}View details{% endif %}</a>
+                    </div>
+                </article>
+
+                <article class="group overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/5">
+                    <div class="relative">
+                        <img src="{% static 'img/mhdgas7.png' %}" alt="MHD Gas" class="h-48 w-full object-cover transition duration-500 group-hover:scale-[1.03]">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-5">
+                            <p class="text-[11px] font-medium uppercase tracking-[0.28em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Circuitos de gas{% else %}Gas circuits{% endif %}</p>
+                            <h3 class="mt-1 text-2xl font-semibold text-white">MHD Gas</h3>
                         </div>
                     </div>
-                </div>
-                <div class="rounded-3xl border border-white/10 bg-gradient-to-br from-cyan/20 to-blue-500/20 p-6 sm:col-span-2">
-<p class="text-sm text-slate-300">
-{% if request.LANGUAGE_CODE == 'es' %}
-Diseñado para usuarios que buscan una solución fiable, fácil de usar y lista para disfrutar desde el primer momento, con una instalación sencilla y un rendimiento óptimo en el día a día.
-{% else %}
-Designed for end users looking for a reliable, easy-to-use solution that works out of the box, with simple setup and optimal performance in everyday use.
-{% endif %}
-</p>                </div>
+                    <div class="p-5 pt-4">
+                        <p class="text-sm leading-6 text-slate-300">{% if request.LANGUAGE_CODE == 'es' %}Contribuye a una llama más estable y a una combustión más limpia, mejorando la eficiencia energética y el desempeño de las calderas de gas.{% else %}Supports flame stability and cleaner combustion in modern gas boiler systems.{% endif %}</p>
+                        <a href="{% url 'products:detail' 'mhd-gas2' %}" class="mt-4 inline-flex items-center rounded-full border border-cyan/50 bg-cyan/10 px-4 py-2 text-sm font-medium text-cyan transition hover:bg-cyan/20">{% if request.LANGUAGE_CODE == 'es' %}Ver detalle{% else %}View details{% endif %}</a>
+                    </div>
+                </article>
             </div>
         </div>
     </div>
@@ -94,7 +88,7 @@ Designed for end users looking for a reliable, easy-to-use solution that works o
         <!-- Header -->
         <div class="flex items-center justify-between border-b border-white/10 px-6 py-5">
             <div>
-                <p class="text-xs uppercase tracking-[0.3em] text-cyan">Red de distribuidores</p>
+                <p class="text-xs uppercase tracking-[0.3em] text-blue-400">Red de instaladores</p>
                 <h2 id="modal-title" class="mt-1 text-2xl font-semibold text-white">Buscar instalador</h2>
             </div>
             <div class="flex items-center gap-2">

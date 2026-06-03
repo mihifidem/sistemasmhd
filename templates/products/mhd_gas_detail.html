@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}MHD Gas | MHD Platform{% endblock %}
+
+{% block content %}
+<section class="mx-auto max-w-6xl px-6 pb-10 pt-16 lg:pt-24">
+    <div class="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:items-center">
+        <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.28em] text-cyan">Producto MHD</p>
+            <h1 class="mt-5 text-5xl font-semibold leading-tight text-white md:text-6xl">MHD Gas</h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-300">Contribuye a una llama mas estable y a una combustion mas limpia, ayudando a mejorar la eficiencia energetica y el desempeno global de calderas de gas en operacion continua.</p>
+
+            <div class="mt-10 grid gap-3 sm:grid-cols-3">
+                <article class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p class="text-2xl font-semibold text-white">+flame</p>
+                    <p class="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">Llama estable</p>
+                </article>
+                <article class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p class="text-2xl font-semibold text-white">-fuel</p>
+                    <p class="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">Mejor eficiencia</p>
+                </article>
+                <article class="rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <p class="text-2xl font-semibold text-white">24/7</p>
+                    <p class="mt-1 text-xs uppercase tracking-[0.18em] text-slate-400">Operacion continua</p>
+                </article>
+            </div>
+
+            <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+                <a href="{% url 'distributors:installer_locator' %}" class="rounded-full bg-cyan px-6 py-3 text-center text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 hover:shadow-glow">Buscar instalador</a>
+                <a href="{% url 'core:how_it_works' %}" class="rounded-full border border-white/20 bg-white/5 px-6 py-3 text-center text-sm font-semibold text-white transition hover:border-cyan hover:text-cyan">Ver como funciona</a>
+            </div>
+        </div>
+
+        <div class="overflow-hidden rounded-[2rem] border border-white/10 bg-white/5 shadow-glow backdrop-blur-xl">
+            <img src="{% static 'img/mhd_gas.jpg' %}" alt="MHD Gas" class="h-full w-full object-cover">
+        </div>
+    </div>
+</section>
+
+<section class="mx-auto max-w-6xl px-6 py-10">
+    <div class="grid gap-6 lg:grid-cols-3">
+        <article class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+            <p class="text-sm uppercase tracking-[0.22em] text-cyan">Aplicacion</p>
+            <h2 class="mt-3 text-2xl font-semibold text-white">Circuitos de gas</h2>
+            <p class="mt-3 text-sm leading-7 text-slate-300">Pensado para calderas de gas donde la estabilidad de combustion impacta directamente en consumo, emisiones y rendimiento termico.</p>
+        </article>
+        <article class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+            <p class="text-sm uppercase tracking-[0.22em] text-cyan">Beneficio</p>
+            <h2 class="mt-3 text-2xl font-semibold text-white">Combustion mas limpia</h2>
+            <p class="mt-3 text-sm leading-7 text-slate-300">Ayuda a mejorar la calidad de la combustion y reduce variaciones de operacion, favoreciendo eficiencia energetica sostenida.</p>
+        </article>
+        <article class="rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl">
+            <p class="text-sm uppercase tracking-[0.22em] text-cyan">Operacion</p>
+            <h2 class="mt-3 text-2xl font-semibold text-white">Bajo mantenimiento</h2>
+            <p class="mt-3 text-sm leading-7 text-slate-300">No requiere consumibles quimicos y se integra con intervencion minima, manteniendo disponibilidad del sistema en servicio.</p>
+        </article>
+    </div>
+
+    <div class="mt-8">
+        <a href="{% url 'core:home' %}" class="inline-flex items-center gap-2 text-sm text-slate-400 transition hover:text-cyan">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            Volver al inicio
+        </a>
+    </div>
+</section>
+{% endblock %}

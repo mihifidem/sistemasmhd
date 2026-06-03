@@ -3,10 +3,25 @@ from django.db import models
 from django.urls import reverse
 
 
+class BlogCategory(models.Model):
+	name = models.CharField(max_length=120, unique=True)
+	slug = models.SlugField(max_length=140, unique=True)
+	description = models.CharField(max_length=255, blank=True)
+
+	class Meta:
+		ordering = ['name']
+		verbose_name = 'Categoria del blog'
+		verbose_name_plural = 'Categorias del blog'
+
+	def __str__(self):
+		return self.name
+
+
 class BlogPost(models.Model):
 	title = models.CharField(max_length=255)
 	slug = models.SlugField(max_length=255, unique=True)
 	author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+	category = models.ForeignKey(BlogCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='posts')
 	content = models.TextField()
 	publish_date = models.DateTimeField()
 	meta_title = models.CharField(max_length=255, blank=True)

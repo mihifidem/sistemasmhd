@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.contrib.auth.hashers import check_password, make_password
 from django.db import models
 from django.urls import reverse
 
@@ -45,6 +46,20 @@ class Distributor(models.Model):
 		verbose_name='Tarifa de precios',
 		help_text='Tarifa asignada por el administrador. Determina los precios aplicados a este distribuidor.',
 	)
+	technician_portal_username = models.CharField(
+		max_length=150,
+		unique=True,
+		null=True,
+		blank=True,
+		verbose_name='Usuario portal técnicos',
+		help_text='Usuario compartido para empleados técnicos del distribuidor.',
+	)
+	technician_portal_password_hash = models.CharField(
+		max_length=128,
+		blank=True,
+		default='',
+		verbose_name='Hash contraseña portal técnicos',
+	)
 	created_at = models.DateTimeField(auto_now_add=True)
 
 	class Meta:
@@ -59,3 +74,15 @@ class Distributor(models.Model):
 	@property
 	def is_approved(self):
 		return self.status == self.Status.APPROVED
+
+	@property
+	def has_technician_portal_access(self):
+		return bool(self.technician_portal_username and self.technician_portal_password_hash)
+
+	def set_technician_password(self, raw_password):
+		self.technician_portal_password_hash = make_password(raw_password)
+
+	def check_technician_password(self, raw_password):
+		if not self.technician_portal_password_hash:
+			return False
+		return check_password(raw_password, self.technician_portal_password_hash)

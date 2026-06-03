@@ -2,7 +2,7 @@
     <div class="rounded-[2rem] border border-cyan/20 bg-gradient-to-r from-cyan/20 to-blue-500/20 p-8 shadow-glow backdrop-blur-xl md:flex md:items-center md:justify-between">
         <div>
             <p class="text-sm uppercase tracking-[0.3em] text-slate-200">{% if request.LANGUAGE_CODE == 'es' %}Red de instaladores{% else %}Installer network{% endif %}</p>
-            <h2 class="mt-4 text-4xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}Necesitas un instalador cualificado cerca de tu domicilio?{% else %}Need a qualified installer near your project?{% endif %}</h2>
+            <h2 class="mt-4 text-4xl font-semibold text-white">{% if request.LANGUAGE_CODE == 'es' %}¿Necesita la ayuda de un instalador especializado cerca de usted?{% else %}Need a qualified installer near your project?{% endif %}</h2>
             <p class="mt-4 max-w-2xl text-base leading-7 text-slate-200">{% if request.LANGUAGE_CODE == 'es' %}Busca partners instaladores aprobados por MHD por provincia, ciudad o codigo postal y contacta directamente.{% else %}Search MHD-approved installation partners by province, city, or postal code and connect directly.{% endif %}</p>
         </div>
         <button onclick="openInstallerModal()" class="mt-6 inline-flex rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-950 transition hover:-translate-y-0.5 md:mt-0">{% if request.LANGUAGE_CODE == 'es' %}Buscar instalador{% else %}Find installer{% endif %}</button>

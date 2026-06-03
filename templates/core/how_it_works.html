@@ -6,6 +6,28 @@
 
 <section class="mx-auto max-w-6xl px-6 py-20">
 
+    <style>
+        .line-icon-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        .line-icon-list li {
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        .line-icon-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.78em;
+            width: 0.9rem;
+            height: 2px;
+            border-radius: 999px;
+            background: #ffffff;
+            opacity: 0.95;
+        }
+    </style>
+
     <!-- HERO -->
     <p class="text-sm uppercase tracking-[0.3em] text-cyan">Tecnología Magneto Hidrodinámica</p>
     <h1 class="mt-4 text-5xl font-semibold text-white">
@@ -27,6 +49,11 @@
             class="px-6 py-3 rounded-full bg-slate-700 text-white">
             🔧 Técnico
         </button>
+
+        <button onclick="showTab('avanzado')" id="tabBtn3"
+            class="px-6 py-3 rounded-full bg-slate-700 text-white">
+            🔬 Avanzado
+        </button>
     </div>
 
     <div class="mt-12">
@@ -34,118 +61,393 @@
         <!-- ================= BASICO ================= -->
         <div id="basico" class="tab-content space-y-10 text-slate-300">
 
+            <div class="flex justify-end no-print">
+                <button type="button"
+                    onclick="downloadTabPdf('basico', 'Tecnología MHD - Usuario')"
+                    class="rounded-full border border-white/15 bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:-translate-y-0.5 hover:border-cyan/60">
+                    Descargar PDF
+                </button>
+            </div>
+
             <div>
                 <h2 class="text-2xl text-white">¿Qué hace realmente la tecnología MHD?</h2>
                 <p>
-                    MHD actúa como un “ordenador invisible” del agua y el gas, reorganizando cómo se comportan.
-                    Esto evita problemas como la cal o el desperdicio de energía en la combustión.
+                    <strong>MHD actúa como un "optimizador natural" del agua y el gas. Sin añadir productos químicos ni consumir electricidad, ayuda a que el agua circule de forma más favorable, reduciendo la formación de cal y permitiendo que los sistemas de calefacción y producción de agua caliente funcionen de manera más eficiente.</strong>
+                </p>
+                <p class="mt-4">
+                    Cuando el agua circula por tuberías, calderas, intercambiadores de calor y otros equipos, los minerales que contiene de forma natural pueden acumularse con el tiempo y formar depósitos de cal. Estas acumulaciones reducen el paso del agua, dificultan la transferencia de calor y obligan a los equipos a trabajar más para obtener el mismo resultado.
+                </p>
+                <p class="mt-4">
+                    La tecnología MHD utiliza campos magnéticos permanentes para influir en el comportamiento de estos minerales mientras el agua circula por la instalación. Gracias a este proceso, se reduce la tendencia de los minerales a adherirse a las superficies internas de tuberías y equipos, ayudando a mantenerlas más limpias durante más tiempo.
+                </p>
+                <p class="mt-4">
+                    En los circuitos de gas, MHD contribuye a favorecer unas condiciones de funcionamiento más estables, permitiendo que los sistemas de combustión trabajen de forma más eficiente. Como resultado, las instalaciones pueden mantener mejor su rendimiento y aprovechar de forma más eficaz la energía disponible.
+                </p>
+                <p class="mt-4">
+                    Al reducir la acumulación de depósitos y preservar la eficiencia de los equipos, se disminuyen las necesidades de mantenimiento, se prolonga la vida útil de las instalaciones y se evitan muchas de las pérdidas de rendimiento que aparecen con el paso del tiempo.
+                </p>
+                <p class="mt-4">
+                    Una de las principales ventajas de MHD es que funciona de manera completamente pasiva: no requiere conexión eléctrica, no consume energía, no utiliza productos químicos y no genera residuos. Una vez instalado, trabaja de forma continua las 24 horas del día, ayudando a mantener el sistema en mejores condiciones de funcionamiento con una intervención mínima.
+                </p>
+                <p class="mt-4">
+                    En definitiva, MHD es una solución sencilla, limpia y sostenible que ayuda a proteger las instalaciones de agua y gas, mejorar su eficiencia y reducir los costes asociados al mantenimiento y al consumo energético.
                 </p>
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
                 <div class="bg-slate-800 p-6 rounded-xl">
                     <h3 class="text-cyan text-xl">💧 Agua</h3>
-                    <p>Evita incrustaciones de cal y mejora el flujo.</p>
+                    <ul class="line-icon-list mt-3 space-y-1 text-slate-200">
+                        <li><strong>Menos cal, más eficiencia.</strong></li>
+                        <li><strong>Tuberías más limpias.</strong></li>
+                        <li><strong>Flujo optimizado.</strong></li>
+                        <li><strong>Mayor rendimiento térmico.</strong></li>
+                        <li><strong>Menor mantenimiento.</strong></li>
+                        <li><strong>Protección continua.</strong></li>
+                        <li><strong>Sin productos químicos.</strong></li>
+                        <li><strong>Funcionamiento 24/7.</strong></li>
+                        <li><strong>Mayor vida útil.</strong></li>
+                        <li><strong>Eficiencia sostenible.</strong></li>
+                    </ul>
                 </div>
 
                 <div class="bg-slate-800 p-6 rounded-xl">
                     <h3 class="text-orange-400 text-xl">🔥 Gas</h3>
-                    <p>Optimiza la combustión y reduce el consumo.</p>
+                    <ul class="line-icon-list mt-3 space-y-1 text-slate-200">
+                        <li><strong>Combustión optimizada.</strong></li>
+                        <li><strong>Llama más estable.</strong></li>
+                        <li><strong>Mayor eficiencia energética.</strong></li>
+                        <li><strong>Mejor rendimiento térmico.</strong></li>
+                        <li><strong>Funcionamiento más eficiente.</strong></li>
+                        <li><strong>Calor mejor aprovechado.</strong></li>
+                        <li><strong>Menor desgaste operativo.</strong></li>
+                        <li><strong>Rendimiento sostenido.</strong></li>
+                        <li><strong>Operación más estable.</strong></li>
+                        <li><strong>Eficiencia sin químicos.</strong></li>
+                    </ul>
                 </div>
             </div>
 
             <div>
                 <h2 class="text-2xl text-white">Resultados</h2>
-                <ul class="list-disc pl-6">
-                    <li>Menos averías</li>
-                    <li>Ahorro energético</li>
-                    <li>Mayor eficiencia</li>
+                <ul class="line-icon-list space-y-1">
+                    <li><strong>Instalaciones más eficientes y sostenibles.</strong></li>
+                    <li><strong>Menores costes de mantenimiento.</strong></li>
+                    <li><strong>Mayor durabilidad de los equipos.</strong></li>
+                    <li><strong>Sin productos químicos ni residuos asociados.</strong></li>
+                    <li><strong>Funcionamiento continuo 24/7.</strong></li>
+                    <li><strong>Sin consumo eléctrico.</strong></li>
+                    <li><strong>Implementación sencilla y sin interrupciones significativas.</strong></li>
+                    <li><strong>Mejora global del rendimiento de la instalación.</strong></li>
                 </ul>
             </div>
 
         </div>
 
         <!-- ================= TECNICO ================= -->
-        <div id="tecnico" class="tab-content hidden space-y-12 text-slate-300">
+        <div id="tecnico" class="tab-content hidden space-y-10 text-slate-300">
 
-            <!-- FUNDAMENTO -->
-            <div>
-                <h2 class="text-2xl text-white">Fundamento físico</h2>
-                <p>
-                    La MHD describe la interacción entre campos magnéticos y fluidos conductores.
-                    En sistemas domésticos, el campo magnético induce reorganización molecular
-                    sin alterar la composición química.
-                </p>
+            <div class="flex justify-end no-print">
+                <button type="button"
+                    onclick="downloadTabPdf('tecnico', 'Tecnología MHD - Técnico')"
+                    class="rounded-full border border-white/15 bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:-translate-y-0.5 hover:border-cyan/60">
+                    Descargar PDF
+                </button>
             </div>
+
+            <div>
+                <h1 class="text-3xl font-semibold text-white">Descripción Técnica del Funcionamiento de los Dispositivos MHD</h1>
+            </div>
+
+            <!-- PRINCIPIO -->
+            <div>
+                <h2 class="text-2xl text-white">Principio de funcionamiento</h2>
+                <p class="mt-3">Los dispositivos MHD (Magneto Hydro Dynamics) son sistemas de acondicionamiento físico para instalaciones de agua y gas que emplean conjuntos de imanes permanentes de alta intensidad estratégicamente dispuestos para generar campos magnéticos estáticos alrededor de la conducción por la que circula el fluido.</p>
+                <p class="mt-3">Su funcionamiento se basa en la interacción entre dichos campos magnéticos y determinadas propiedades físico-químicas de los fluidos en movimiento, actuando sin aporte energético externo, sin elementos electrónicos y sin la incorporación de aditivos químicos.</p>
+            </div>
+
+            <hr class="border-white/10">
 
             <!-- AGUA -->
             <div>
-                <h2 class="text-2xl text-cyan">💧 Tratamiento del agua</h2>
-                <p>
-                    Se modifica la cristalización del CaCO₃ promoviendo aragonito,
-                    reduciendo la adherencia en superficies metálicas.
-                </p>
-                <ul class="list-disc pl-6">
-                    <li>Menor fouling térmico</li>
-                    <li>Mejor intercambio de calor</li>
-                    <li>Mayor eficiencia hidráulica</li>
+                <h2 class="text-2xl text-cyan">MHD para circuitos de agua</h2>
+
+                <h3 class="text-lg text-white mt-6">Acción sobre las sales minerales disueltas</h3>
+                <p class="mt-2">El agua de abastecimiento contiene de forma natural sales minerales disueltas, principalmente:</p>
+                <ul class="line-icon-list mt-2 space-y-1">
+                    <li>Carbonato cálcico (CaCO₃)</li>
+                    <li>Carbonato magnésico (MgCO₃)</li>
+                    <li>Bicarbonatos</li>
+                    <li>Sulfatos</li>
+                    <li>Oligoelementos minerales</li>
                 </ul>
+                <p class="mt-3">Cuando el agua es sometida a calentamiento o a variaciones de presión, parte de estas sales puede precipitar formando incrustaciones calcáreas sobre las superficies internas de tuberías, calderas, intercambiadores de calor, resistencias eléctricas, acumuladores, válvulas y equipos industriales. Estas incrustaciones actúan como una barrera térmica que reduce la transferencia de calor y aumenta las pérdidas energéticas del sistema.</p>
+
+                <h3 class="text-lg text-white mt-6">Influencia magnetohidrodinámica</h3>
+                <p class="mt-2">Al circular el agua por la zona de influencia magnética generada por el dispositivo MHD, los iones minerales presentes en suspensión atraviesan un campo magnético constante. Este fenómeno puede favorecer modificaciones en los procesos de nucleación y cristalización de determinadas sales minerales, alterando la forma y estructura de algunos cristales que se generan durante la precipitación.</p>
+                <p class="mt-3">Como consecuencia:</p>
+                <ul class="line-icon-list mt-2 space-y-1">
+                    <li>Se reduce la tendencia de ciertos minerales a adherirse a superficies metálicas.</li>
+                    <li>Parte de la precipitación puede producirse en forma de partículas suspendidas.</li>
+                    <li>Se dificulta la formación de capas compactas de incrustación.</li>
+                    <li>Se favorece la conservación de las secciones hidráulicas originales de la instalación.</li>
+                </ul>
+
+                <h3 class="text-lg text-white mt-6">Efectos sobre la transferencia térmica</h3>
+                <p class="mt-2">La reducción de depósitos calcáreos permite mantener más próxima a su estado original la superficie de intercambio térmico, contribuyendo a mejor transferencia de calor, menor resistencia térmica, menor tiempo de calentamiento, mayor estabilidad operativa y conservación del rendimiento de diseño. Especialmente en calderas, intercambiadores de placas, acumuladores, equipos solares térmicos y sistemas industriales de calentamiento.</p>
+
+                <h3 class="text-lg text-white mt-6">Protección de la instalación</h3>
+                <p class="mt-2">La disminución de acumulaciones minerales puede ayudar a reducir obstrucciones parciales, pérdidas de carga, sobreesfuerzos hidráulicos, intervenciones de desincrustación y sustitución prematura de componentes, favoreciendo la prolongación de la vida útil de la instalación.</p>
             </div>
+
+            <hr class="border-white/10">
 
             <!-- GAS -->
             <div>
-                <h2 class="text-2xl text-orange-400">🔥 Tratamiento del gas</h2>
-                <p>
-                    Mejora la mezcla aire-combustible mediante orientación molecular,
-                    optimizando la combustión.
-                </p>
-                <ul class="list-disc pl-6">
-                    <li>Reducción de CO</li>
-                    <li>Mejor eficiencia térmica</li>
-                    <li>Combustión más estable</li>
-                </ul>
+                <h2 class="text-2xl text-orange-400">MHD para circuitos de gas</h2>
+
+                <h3 class="text-lg text-white mt-6">Optimización de las condiciones de combustión</h3>
+                <p class="mt-2">En instalaciones de combustión, el dispositivo MHD se instala externamente sobre la conducción de gas sin alterar su sección ni modificar la instalación existente. El campo magnético generado actúa sobre el flujo gaseoso durante su circulación por la tubería, buscando favorecer condiciones de funcionamiento más homogéneas antes de su llegada al quemador.</p>
+
+                <h3 class="text-lg text-white mt-6">Estabilidad del proceso de combustión</h3>
+                <p class="mt-2">Una combustión eficiente depende principalmente de la mezcla aire-combustible, la presión de suministro, la temperatura, la calidad de la llama y la geometría del quemador. El acondicionamiento físico del flujo gaseoso puede contribuir a mantener una combustión más estable y uniforme, buscando mejor aprovechamiento energético, mayor estabilidad de llama, reducción de fluctuaciones operativas y conservación del rendimiento térmico.</p>
+
+                <h3 class="text-lg text-white mt-6">Conservación del rendimiento energético</h3>
+                <p class="mt-2">Cuando una instalación mantiene limpios sus intercambiadores y sus condiciones de combustión son estables, los equipos pueden operar más cerca de los parámetros para los que fueron diseñados, manteniendo la eficiencia del sistema y minimizando intervenciones correctivas.</p>
             </div>
 
-            <!-- GRAFICO -->
+            <hr class="border-white/10">
+
+            <!-- TECNOLOGIA PASIVA -->
             <div>
-                <h2 class="text-2xl text-white">📊 Comparativa de eficiencia</h2>
+                <h2 class="text-2xl text-white">Tecnología pasiva</h2>
+                <p class="mt-3">Una característica diferencial de los dispositivos MHD es que constituyen una tecnología completamente pasiva. No requieren alimentación eléctrica, baterías, electrónica, software, sensores ni mantenimiento periódico. Los campos magnéticos son generados por imanes permanentes de larga duración diseñados para trabajar de forma continua durante toda la vida útil del dispositivo.</p>
+            </div>
 
-                <div class="bg-slate-800 p-6 rounded-xl mt-6">
-                    <p class="mb-6">Comparación entre sistema convencional vs MHD:</p>
+            <hr class="border-white/10">
 
-                    <!-- BARRAS -->
-                    <div class="space-y-4">
-
-                        <div>
-                            <p>Sin MHD (eficiencia)</p>
-                            <div class="w-full bg-slate-700 h-4 rounded">
-                                <div class="bg-red-500 h-4 rounded" style="width:60%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <p>Con MHD (eficiencia)</p>
-                            <div class="w-full bg-slate-700 h-4 rounded">
-                                <div class="bg-green-500 h-4 rounded" style="width:85%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <p>Incrustaciones sin MHD</p>
-                            <div class="w-full bg-slate-700 h-4 rounded">
-                                <div class="bg-red-500 h-4 rounded" style="width:80%"></div>
-                            </div>
-                        </div>
-
-                        <div>
-                            <p>Incrustaciones con MHD</p>
-                            <div class="w-full bg-slate-700 h-4 rounded">
-                                <div class="bg-green-500 h-4 rounded" style="width:20%"></div>
-                            </div>
-                        </div>
-
+            <!-- VENTAJAS -->
+            <div>
+                <h2 class="text-2xl text-white">Ventajas técnicas</h2>
+                <div class="grid md:grid-cols-2 gap-8 mt-4">
+                    <div class="bg-slate-800 p-6 rounded-xl">
+                        <h3 class="text-cyan text-lg mb-3">💧 Agua</h3>
+                        <ul class="line-icon-list space-y-1 text-slate-200">
+                            <li>Acondicionamiento físico del flujo</li>
+                            <li>Reducción de la tendencia a la incrustación</li>
+                            <li>Conservación de la transferencia térmica</li>
+                            <li>Protección de tuberías y equipos</li>
+                            <li>Menor pérdida de rendimiento</li>
+                            <li>Mayor estabilidad hidráulica</li>
+                            <li>Funcionamiento continuo 24/7</li>
+                            <li>Sin reactivos químicos</li>
+                            <li>Sin generación de residuos</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl">
+                        <h3 class="text-orange-400 text-lg mb-3">🔥 Gas</h3>
+                        <ul class="line-icon-list space-y-1 text-slate-200">
+                            <li>Acondicionamiento del flujo gaseoso</li>
+                            <li>Estabilidad operativa de la combustión</li>
+                            <li>Conservación del rendimiento térmico</li>
+                            <li>Mejor aprovechamiento energético</li>
+                            <li>Funcionamiento continuo</li>
+                            <li>Sin consumo eléctrico</li>
+                            <li>Sin mantenimiento</li>
+                        </ul>
                     </div>
                 </div>
+            </div>
+
+            <hr class="border-white/10">
+
+            <!-- RESUMEN -->
+            <div class="bg-slate-800 p-6 rounded-xl">
+                <h2 class="text-xl text-white mb-3">Resumen técnico</h2>
+                <p>Los dispositivos MHD constituyen sistemas de acondicionamiento físico basados en campos magnéticos permanentes que actúan sobre fluidos en circulación. Su objetivo es contribuir a la conservación de las condiciones operativas de instalaciones de agua y gas, ayudando a reducir fenómenos de incrustación, preservar la transferencia térmica y mantener la eficiencia de funcionamiento de los equipos, todo ello mediante una tecnología pasiva, sin consumo energético y sin utilización de productos químicos.</p>
+            </div>
+
+        </div>
+
+        <!-- ================= AVANZADO ================= -->
+        <div id="avanzado" class="tab-content hidden space-y-10 text-slate-300">
+
+            <div class="flex justify-end no-print">
+                <button type="button"
+                    onclick="downloadTabPdf('avanzado', 'Tecnología MHD - Avanzado')"
+                    class="rounded-full border border-white/15 bg-white px-4 py-2 text-sm font-medium text-slate-950 transition hover:-translate-y-0.5 hover:border-cyan/60">
+                    Descargar PDF
+                </button>
+            </div>
+
+            <div>
+                <h1 class="text-3xl font-semibold text-white">Fundamentos Científicos y Parámetros de Diseño MHD</h1>
+                <p class="mt-3 text-slate-400">Información de referencia para ingenieros, técnicos especializados e investigadores.</p>
+            </div>
+
+            <hr class="border-white/10">
+
+            <!-- FÍSICA -->
+            <div>
+                <h2 class="text-2xl text-white">Marco físico: Fuerza de Lorentz y fluidos conductores</h2>
+                <p class="mt-3">La interacción fundamental que subyace en los dispositivos MHD es la fuerza de Lorentz sobre partículas cargadas en movimiento dentro de un campo magnético estático:</p>
+                <div class="bg-slate-900 rounded-xl p-5 mt-4 font-mono text-cyan text-sm">
+                    <p>F = q(v × B)</p>
+                    <p class="mt-2 text-slate-400 font-sans text-xs">F = fuerza sobre la partícula (N) · q = carga eléctrica (C) · v = velocidad del fluido (m/s) · B = inducción magnética (T)</p>
+                </div>
+                <p class="mt-4">En fluidos acuosos que contienen iones Ca²⁺, Mg²⁺, HCO₃⁻ y CO₃²⁻, esta fuerza actúa perturbando las trayectorias iónicas durante el flujo, lo cual puede modificar la cinética de nucleación heterogénea sobre superficies metálicas.</p>
+                <p class="mt-3">El parámetro adimensional de Hartmann (Ha) cuantifica la relación entre las fuerzas magnéticas y las viscosas:</p>
+                <div class="bg-slate-900 rounded-xl p-5 mt-4 font-mono text-cyan text-sm">
+                    <p>Ha = B·L·√(σ/μ)</p>
+                    <p class="mt-2 text-slate-400 font-sans text-xs">B = campo magnético (T) · L = longitud característica (diámetro interior, m) · σ = conductividad eléctrica del fluido (S/m) · μ = viscosidad dinámica (Pa·s)</p>
+                </div>
+                <p class="mt-3">Para agua doméstica (σ ≈ 0,05–0,5 S/m) con campos de 0,1–0,5 T y diámetros de 15–50 mm, los valores de Ha se sitúan generalmente en el rango 0,01–0,5, indicando que los efectos magnéticos son perturbativos sobre el flujo, no dominantes.</p>
+            </div>
+
+            <hr class="border-white/10">
+
+            <!-- CRISTALIZACIÓN -->
+            <div>
+                <h2 class="text-2xl text-cyan">Mecanismo de cristalización: calcita vs aragonito</h2>
+                <p class="mt-3">El carbonato cálcico (CaCO₃) precipita en dos polimorfos principales con propiedades de adhesión muy diferentes:</p>
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-sm text-left border border-white/10 rounded-xl overflow-hidden">
+                        <thead class="bg-slate-800 text-white">
+                            <tr>
+                                <th class="px-4 py-3">Propiedad</th>
+                                <th class="px-4 py-3">Calcita</th>
+                                <th class="px-4 py-3">Aragonito</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">Sistema cristalino</td><td class="px-4 py-3">Trigonal/romboédrico</td><td class="px-4 py-3">Ortorrómbico</td></tr>
+                            <tr class="bg-slate-900/30"><td class="px-4 py-3">Densidad (g/cm³)</td><td class="px-4 py-3">2,71</td><td class="px-4 py-3">2,93</td></tr>
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">Adhesión a metales</td><td class="px-4 py-3 text-red-400">Alta</td><td class="px-4 py-3 text-green-400">Baja</td></tr>
+                            <tr class="bg-slate-900/30"><td class="px-4 py-3">Morfología habitual</td><td class="px-4 py-3">Romboédrica compacta</td><td class="px-4 py-3">Acicular/prismática</td></tr>
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">Solubilidad relativa</td><td class="px-4 py-3">Menor</td><td class="px-4 py-3">Ligeramente mayor</td></tr>
+                            <tr class="bg-slate-900/30"><td class="px-4 py-3">Tendencia a incrustación</td><td class="px-4 py-3 text-red-400">Elevada</td><td class="px-4 py-3 text-green-400">Reducida</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-4">Diversas investigaciones (Lipus et al., Coey & Cass, Higashitani et al.) señalan que la exposición a campos magnéticos puede favorecer la precipitación en forma de aragonito frente a calcita, aunque los resultados muestran dependencia de la intensidad del campo, el tiempo de residencia, la dureza del agua, el pH y la temperatura.</p>
+            </div>
+
+            <hr class="border-white/10">
+
+            <!-- PARÁMETROS DE DISEÑO -->
+            <div>
+                <h2 class="text-2xl text-white">Parámetros de diseño del dispositivo</h2>
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-sm text-left border border-white/10 rounded-xl overflow-hidden">
+                        <thead class="bg-slate-800 text-white">
+                            <tr>
+                                <th class="px-4 py-3">Parámetro</th>
+                                <th class="px-4 py-3">Rango típico</th>
+                                <th class="px-4 py-3">Observaciones</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 text-slate-300">
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">Inducción magnética superficial</td><td class="px-4 py-3">0,1 – 0,6 T</td><td class="px-4 py-3">Imanes NdFeB N42–N52</td></tr>
+                            <tr class="bg-slate-900/30"><td class="px-4 py-3">Campo en el eje de tubería</td><td class="px-4 py-3">0,01 – 0,15 T</td><td class="px-4 py-3">Depende del diámetro y disposición</td></tr>
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">Longitud de zona activa</td><td class="px-4 py-3">50 – 250 mm</td><td class="px-4 py-3">Mayor longitud → mayor tiempo de exposición</td></tr>
+                            <tr class="bg-slate-900/30"><td class="px-4 py-3">Tiempo de residencia magnética</td><td class="px-4 py-3">0,01 – 0,5 s</td><td class="px-4 py-3">A velocidades de 0,5–2 m/s</td></tr>
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">Temperatura operativa máx.</td><td class="px-4 py-3">≤ 80 °C</td><td class="px-4 py-3">Limitación térmica de NdFeB (~80–120 °C)</td></tr>
+                            <tr class="bg-slate-900/30"><td class="px-4 py-3">Presión máxima</td><td class="px-4 py-3">≤ 16 bar</td><td class="px-4 py-3">Según cuerpo del dispositivo</td></tr>
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">Número de polos</td><td class="px-4 py-3">4 – 16</td><td class="px-4 py-3">Configuración multipolar para mayor uniformidad</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <hr class="border-white/10">
+
+            <!-- GAS AVANZADO -->
+            <div>
+                <h2 class="text-2xl text-orange-400">Mecanismo de acción sobre hidrocarburos gaseosos</h2>
+                <p class="mt-3">El gas natural (predominantemente CH₄) y el GLP presentan enlace covalente apolar, por lo que su conductividad eléctrica es negligible. Sin embargo, durante el flujo a través del campo magnético se pueden producir efectos sobre:</p>
+                <ul class="line-icon-list mt-3 space-y-2">
+                    <li><strong>Distribución de velocidades del flujo laminar/turbulento:</strong> el perfil de velocidades en la sección transversal puede modificarse mediante la interacción con trazas de componentes polares (vapor de agua, mercaptanos, impurezas).</li>
+                    <li><strong>Alineación de momentos diamagnéticos moleculares:</strong> moléculas como el O₂ (paramagnético, χ = +3.449×10⁻⁶) y el CH₄ (débilmente diamagnético) responden diferente al campo, pudiendo alterar sutilmente la distribución molecular en la sección.</li>
+                    <li><strong>Condicionamiento de la zona de premezcla:</strong> una distribución más homogénea del gas antes del quemador puede favorecer una relación estequiométrica más uniforme en el frente de llama.</li>
+                </ul>
+                <p class="mt-4 text-slate-400 text-sm">Nota: los efectos sobre flujos gaseosos puros son significativamente menores que sobre fluidos iónicos. La magnitud del efecto depende de la composición del gas, el caudal y la geometría de instalación.</p>
+            </div>
+
+            <hr class="border-white/10">
+
+            <!-- RESISTENCIA TÉRMICA -->
+            <div>
+                <h2 class="text-2xl text-white">Impacto de incrustaciones sobre resistencia térmica</h2>
+                <p class="mt-3">La resistencia térmica adicional introducida por una capa de incrustación calcárea se puede estimar mediante:</p>
+                <div class="bg-slate-900 rounded-xl p-5 mt-4 font-mono text-cyan text-sm">
+                    <p>R_fouling = e / λ</p>
+                    <p class="mt-2 text-slate-400 font-sans text-xs">e = espesor de la capa (m) · λ = conductividad térmica del depósito (W/m·K)</p>
+                </div>
+                <div class="overflow-x-auto mt-4">
+                    <table class="w-full text-sm text-left border border-white/10 rounded-xl overflow-hidden">
+                        <thead class="bg-slate-800 text-white">
+                            <tr>
+                                <th class="px-4 py-3">Espesor incrustación</th>
+                                <th class="px-4 py-3">λ CaCO₃ (W/m·K)</th>
+                                <th class="px-4 py-3">R_fouling (m²·K/W)</th>
+                                <th class="px-4 py-3">Pérdida eficiencia estimada</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5 text-slate-300">
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">0,5 mm</td><td class="px-4 py-3">2,2</td><td class="px-4 py-3">2,3×10⁻⁴</td><td class="px-4 py-3">~3–5 %</td></tr>
+                            <tr class="bg-slate-900/30"><td class="px-4 py-3">1,0 mm</td><td class="px-4 py-3">2,2</td><td class="px-4 py-3">4,5×10⁻⁴</td><td class="px-4 py-3">~6–10 %</td></tr>
+                            <tr class="bg-slate-900/50"><td class="px-4 py-3">2,0 mm</td><td class="px-4 py-3">2,2</td><td class="px-4 py-3">9,1×10⁻⁴</td><td class="px-4 py-3">~12–18 %</td></tr>
+                            <tr class="bg-slate-900/30"><td class="px-4 py-3">5,0 mm</td><td class="px-4 py-3">2,2</td><td class="px-4 py-3">2,3×10⁻³</td><td class="px-4 py-3">~25–35 %</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="mt-3 text-slate-400 text-sm">La reducción de la velocidad de formación de estas capas mediante tratamiento MHD puede preservar la eficiencia del intercambiador a lo largo del tiempo.</p>
+            </div>
+
+            <hr class="border-white/10">
+
+            <!-- INSTALACIÓN -->
+            <div>
+                <h2 class="text-2xl text-white">Especificaciones de instalación</h2>
+                <div class="grid md:grid-cols-2 gap-8 mt-4">
+                    <div class="bg-slate-800 p-6 rounded-xl">
+                        <h3 class="text-cyan text-lg mb-3">💧 Circuito de agua</h3>
+                        <ul class="line-icon-list space-y-1 text-slate-300 text-sm">
+                            <li>Posición: antes del calentador/caldera</li>
+                            <li>Tramo recto mínimo aguas arriba: 5×DN</li>
+                            <li>Tramo recto mínimo aguas abajo: 3×DN</li>
+                            <li>Sin bypass obligatorio (instalación en línea)</li>
+                            <li>Sentido de flujo según flecha del dispositivo</li>
+                            <li>Compatible con tuberías Cu, acero, CPVC, PEX</li>
+                            <li>No compatible con instalación en tuberías ferromagnéticas (acero al carbono sin revestimiento) sin estudio previo</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-800 p-6 rounded-xl">
+                        <h3 class="text-orange-400 text-lg mb-3">🔥 Circuito de gas</h3>
+                        <ul class="line-icon-list space-y-1 text-slate-300 text-sm">
+                            <li>Posición: antes del quemador/válvula de gas</li>
+                            <li>Instalación exterior sobre la tubería (sin corte del gas)</li>
+                            <li>Solo para tuberías no ferromagnéticas (cobre, latón, PVC, acero inoxidable)</li>
+                            <li>Requiere homologación del instalador autorizado en gas</li>
+                            <li>No modifica la presión ni el caudal de gas</li>
+                            <li>No requiere legalización adicional en la mayoría de CCAA</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="border-white/10">
+
+            <!-- REFERENCIAS -->
+            <div>
+                <h2 class="text-2xl text-white">Referencias bibliográficas seleccionadas</h2>
+                <ul class="line-icon-list mt-3 space-y-2 text-sm text-slate-400">
+                    <li>Lipus, L.C. et al. (2001). Influence of magnetic field on the crystallization of CaCO₃. <em>Acta Chimica Slovenica</em>, 48(4), 563–576.</li>
+                    <li>Coey, J.M.D. & Cass, S. (2000). Magnetic water treatment. <em>Journal of Magnetism and Magnetic Materials</em>, 209(1-3), 71–74.</li>
+                    <li>Higashitani, K. et al. (1993). Magnetic effects on zeta potential and diffusivity of non-magnetic colloidal particles. <em>Journal of Colloid and Interface Science</em>, 156(1), 90–95.</li>
+                    <li>Alimi, F. et al. (2009). Effect of magnetic water treatment on calcium carbonate precipitation. <em>Desalination</em>, 249(3), 1099–1105.</li>
+                    <li>Chang, M.C. & Tai, C.Y. (2010). Effect of the magnetic field on the induction period of CaCO₃ nucleation. <em>Chemical Engineering Journal</em>, 161(1-2), 300–305.</li>
+                </ul>
             </div>
 
         </div>
@@ -154,7 +456,7 @@
 
     <!-- VIDEOS -->
     <div class="mt-20">
-        <h2 class="text-3xl text-white mb-8">🎥 Vídeos explicativos</h2>
+        <h2 class="text-3xl text-white mb-8">Vídeos</h2>
 
         <div class="grid md:grid-cols-2 gap-8">
 
@@ -184,17 +486,132 @@ function showTab(tab) {
     document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
     document.getElementById(tab).classList.remove('hidden');
 
-    document.getElementById('tabBtn1').classList.remove('bg-cyan','text-black');
-    document.getElementById('tabBtn1').classList.add('bg-slate-700','text-white');
+    ['tabBtn1','tabBtn2','tabBtn3'].forEach(id => {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.classList.remove('bg-cyan','text-black');
+            btn.classList.add('bg-slate-700','text-white');
+        }
+    });
 
-    document.getElementById('tabBtn2').classList.remove('bg-cyan','text-black');
-    document.getElementById('tabBtn2').classList.add('bg-slate-700','text-white');
-
-    if(tab === 'basico'){
-        document.getElementById('tabBtn1').classList.add('bg-cyan','text-black');
-    } else {
-        document.getElementById('tabBtn2').classList.add('bg-cyan','text-black');
+    const map = { basico: 'tabBtn1', tecnico: 'tabBtn2', avanzado: 'tabBtn3' };
+    const activeBtn = document.getElementById(map[tab]);
+    if (activeBtn) {
+        activeBtn.classList.remove('bg-slate-700','text-white');
+        activeBtn.classList.add('bg-cyan','text-black');
     }
+}
+
+function downloadTabPdf(tabId, title) {
+    const source = document.getElementById(tabId);
+    if (!source) return;
+
+    const printWindow = window.open('', '_blank', 'width=1200,height=900');
+    if (!printWindow) return;
+
+    const cloned = source.cloneNode(true);
+    cloned.classList.remove('hidden');
+    cloned.querySelectorAll('.no-print').forEach((el) => el.remove());
+
+    const headAssets = Array.from(document.querySelectorAll('link[rel="stylesheet"], style'))
+        .map((el) => el.outerHTML)
+        .join('\n');
+
+    const printStyles = `
+        <style>
+            @page { size: A4; margin: 16mm; }
+            html, body {
+                background: #ffffff !important;
+                color: #000000 !important;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            body {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .pdf-sheet {
+                max-width: 960px;
+                margin: 0 auto;
+                padding: 0;
+            }
+            .pdf-sheet * {
+                color: #000000 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                text-shadow: none !important;
+            }
+            .pdf-sheet h1,
+            .pdf-sheet h2,
+            .pdf-sheet h3,
+            .pdf-sheet h4,
+            .pdf-sheet p,
+            .pdf-sheet li,
+            .pdf-sheet td,
+            .pdf-sheet th {
+                color: #000000 !important;
+            }
+            .pdf-sheet hr {
+                border-color: #cbd5e1 !important;
+            }
+            .pdf-sheet table {
+                border-color: #cbd5e1 !important;
+            }
+            .pdf-sheet img,
+            .pdf-sheet iframe,
+            .pdf-sheet video {
+                display: none !important;
+            }
+            .pdf-sheet .border,
+            .pdf-sheet [class*="border-"] {
+                border-color: #cbd5e1 !important;
+            }
+            .pdf-sheet .bg-slate-800,
+            .pdf-sheet .bg-slate-900,
+            .pdf-sheet .bg-slate-950,
+            .pdf-sheet .bg-white,
+            .pdf-sheet .bg-cyan,
+            .pdf-sheet .bg-orange-400,
+            .pdf-sheet .bg-green-500,
+            .pdf-sheet .bg-red-500 {
+                background: #ffffff !important;
+            }
+            .pdf-sheet .rounded-xl,
+            .pdf-sheet .rounded-2xl,
+            .pdf-sheet .rounded-full {
+                border-radius: 0 !important;
+            }
+            .pdf-sheet .line-icon-list li::before {
+                background: #000000 !important;
+            }
+        </style>`;
+
+    printWindow.document.open();
+    printWindow.document.write(`<!doctype html>
+<html lang="${document.documentElement.lang || 'es'}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${title}</title>
+    ${headAssets}
+    ${printStyles}
+</head>
+<body>
+    <main class="pdf-sheet">
+        ${cloned.innerHTML}
+    </main>
+</body>
+</html>`);
+    printWindow.document.close();
+
+    const triggerPrint = function () {
+        printWindow.focus();
+        printWindow.print();
+    };
+
+    printWindow.onload = triggerPrint;
+    setTimeout(triggerPrint, 500);
 }
 </script>
 

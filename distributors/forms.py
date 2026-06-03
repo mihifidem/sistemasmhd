@@ -18,6 +18,85 @@ class DistributorProfileForm(forms.ModelForm):
         }
 
 
+class TechnicianPortalAccessForm(forms.ModelForm):
+    technician_portal_password = forms.CharField(
+        required=False,
+        min_length=6,
+        label='Contraseña acceso técnicos',
+        widget=forms.PasswordInput(render_value=False),
+        help_text='Mínimo 6 caracteres. Déjalo vacío si no quieres cambiarla.',
+    )
+    technician_portal_password_confirm = forms.CharField(
+        required=False,
+        label='Confirmar contraseña técnicos',
+        widget=forms.PasswordInput(render_value=False),
+    )
+
+    class Meta:
+        model = Distributor
+        fields = ('technician_portal_username',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['technician_portal_username'].required = False
+
+    def clean_technician_portal_username(self):
+        username = (self.cleaned_data.get('technician_portal_username') or '').strip().lower()
+        if not username:
+            return ''
+
+        user_model = get_user_model()
+        if user_model.objects.filter(username__iexact=username).exists():
+            raise forms.ValidationError('Este usuario ya existe en la plataforma.')
+
+        qs = Distributor.objects.filter(technician_portal_username__iexact=username)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise forms.ValidationError('Este usuario ya está asignado a otro distribuidor.')
+
+        return username
+
+    def clean(self):
+        cleaned_data = super().clean()
+        username = cleaned_data.get('technician_portal_username') or ''
+        password = cleaned_data.get('technician_portal_password') or ''
+        password_confirm = cleaned_data.get('technician_portal_password_confirm') or ''
+
+        if password and not password_confirm:
+            self.add_error('technician_portal_password_confirm', 'Confirma la contraseña para técnicos.')
+        if password_confirm and not password:
+            self.add_error('technician_portal_password', 'Introduce la contraseña para técnicos.')
+        if password and password_confirm and password != password_confirm:
+            self.add_error('technician_portal_password_confirm', 'Las contraseñas no coinciden.')
+
+        if username and not (password or (self.instance and self.instance.technician_portal_password_hash)):
+            self.add_error('technician_portal_password', 'Define una contraseña inicial para habilitar el acceso técnico.')
+
+        if not username:
+            cleaned_data['technician_portal_password'] = ''
+            cleaned_data['technician_portal_password_confirm'] = ''
+
+        return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        username = (self.cleaned_data.get('technician_portal_username') or '').strip().lower()
+        password = self.cleaned_data.get('technician_portal_password') or ''
+
+        if not username:
+            instance.technician_portal_username = None
+            instance.technician_portal_password_hash = ''
+        else:
+            instance.technician_portal_username = username
+            if password:
+                instance.set_technician_password(password)
+
+        if commit:
+            instance.save()
+        return instance
+
+
 class DistributorRegistrationForm(UserCreationForm):
     username = None
     company_name = forms.CharField(max_length=255)

@@ -34,6 +34,7 @@
             <h4 class="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">{% if request.LANGUAGE_CODE == 'es' %}Distribuidores{% else %}Distributors{% endif %}</h4>
             <ul class="mt-4 space-y-3 text-sm text-slate-300">
                 <li><a href="{% url 'login' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Acceso portal{% else %}Portal login{% endif %}</a></li>
+                <li><a href="{% url 'distributors:technician_login' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Acceso técnicos{% else %}Technician access{% endif %}</a></li>
                 <li><a href="{% url 'distributors:register' %}" class="transition hover:text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Hazte distribuidor{% else %}Become a distributor{% endif %}</a></li>
             </ul>
         </div>

@@ -1,4 +1,5 @@
 from django.contrib import messages
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from distributors.decorators import approved_distributor_required
@@ -15,7 +16,13 @@ def catalog(request):
 
 
 def product_detail(request, slug):
-    product = get_object_or_404(Product, slug=slug, active=True)
+    product = Product.objects.filter(slug=slug, active=True).first()
+    if not product and slug == 'mhd-agua2':
+        return render(request, 'products/mhd_agua_detail.html')
+    if not product and slug == 'mhd-gas2':
+        return render(request, 'products/mhd_gas_detail.html')
+    if not product:
+        raise Http404('Product not found')
     form = CartAddForm() if request.user.is_authenticated else None
     return render(request, 'products/detail.html', {'product': product, 'form': form})
 

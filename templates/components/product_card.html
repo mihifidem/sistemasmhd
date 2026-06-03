@@ -3,7 +3,13 @@
     <div class="flip-card-inner">
         <!-- Front: Image -->
         <div class="flip-card-front rounded-[2rem] overflow-hidden relative">
-            <img src="{% static 'img/'|add:product.slug|add:'.jpg' %}" alt="{{ product.name }}" class="w-full h-full object-cover">
+            {% if 'agua' in product.slug %}
+            <img src="{% static 'img/mhdagua7.png' %}" alt="{{ product.name }}" class="w-full h-full object-cover">
+            {% elif 'gas' in product.slug %}
+            <img src="{% static 'img/mhdgas7.png' %}" alt="{{ product.name }}" class="w-full h-full object-cover">
+            {% else %}
+            <img src="{% static 'img/'|add:product.slug|add:'.png' %}" alt="{{ product.name }}" class="w-full h-full object-cover">
+            {% endif %}
             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
                 <div>
                     <p class="text-xs uppercase tracking-[0.3em] text-cyan">{% if request.LANGUAGE_CODE == 'es' %}Producto{% else %}Product{% endif %}</p>

@@ -13,6 +13,62 @@ body {
         linear-gradient(180deg, rgba(15, 23, 42, 1) 0%, rgba(2, 6, 23, 1) 100%);
 }
 
+.hero-home-grid {
+    border: 1px solid rgba(148, 163, 184, 0.1);
+    background:
+        linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+        radial-gradient(circle at 20% 20%, rgba(34, 211, 238, 0.1), rgba(15, 23, 42, 0.35));
+    background-size: 28px 28px, 28px 28px, 100% 100%;
+    mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.95), transparent 96%);
+}
+
+.hero-home-glow {
+    background: radial-gradient(circle, rgba(34, 211, 238, 0.22), rgba(34, 211, 238, 0));
+    filter: blur(6px);
+}
+
+.hero-home-glow-alt {
+    background: radial-gradient(circle, rgba(59, 130, 246, 0.18), rgba(59, 130, 246, 0));
+}
+
+.hero-home-dot {
+    box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.75);
+    animation: heroPulse 2.5s ease-out infinite;
+}
+
+.hero-stat {
+    transition: transform 180ms ease, border-color 180ms ease, background-color 180ms ease;
+}
+
+.hero-stat:hover {
+    transform: translateY(-3px);
+    border-color: rgba(34, 211, 238, 0.4);
+    background: rgba(15, 23, 42, 0.92);
+}
+
+html.light .mhd-agua-headline {
+    color: #000 !important;
+}
+
+.mhd-white-map {
+    filter: brightness(1.6) saturate(0.35) contrast(0.85);
+    opacity: 0.95;
+    background: transparent;
+}
+
+@keyframes heroPulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(34, 211, 238, 0.75);
+    }
+    75% {
+        box-shadow: 0 0 0 12px rgba(34, 211, 238, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(34, 211, 238, 0);
+    }
+}
+
 /* Flip Card Styles */
 .flip-card {
     perspective: 1000px;
@@ -134,4 +190,55 @@ button {
     outline: none;
     border-color: rgba(34, 211, 238, 0.6);
     box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.18);
+}
+
+.registration-form label {
+    color: #0f172a !important;
+}
+
+.registration-form input,
+.registration-form select,
+.registration-form textarea {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 1px solid rgba(15, 23, 42, 0.2) !important;
+}
+
+.registration-form input::placeholder,
+.registration-form textarea::placeholder {
+    color: #64748b !important;
+}
+
+.registration-form select option {
+    color: #0f172a;
+    background: #ffffff;
+}
+
+html:not(.light) input,
+html:not(.light) textarea,
+html:not(.light) select {
+    color: #0f172a !important;
+}
+
+html:not(.light) label,
+html:not(.light) .registration-form label {
+    color: #f8fafc !important;
+}
+
+html:not(.light) .registration-form input,
+html:not(.light) .registration-form textarea,
+html:not(.light) .registration-form select {
+    color: #f8fafc !important;
+    background: rgba(15, 23, 42, 0.65) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+html:not(.light) .registration-form input::placeholder,
+html:not(.light) .registration-form textarea::placeholder {
+    color: #94a3b8 !important;
+}
+
+html:not(.light) .registration-form select option {
+    color: #f8fafc;
+    background: #0f172a;
 }
